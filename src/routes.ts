@@ -10,19 +10,22 @@ const recipeController = new RecipeController();
 
 const routes = express.Router();
 
-
+// Só pra testar que tá funcionando
 routes.get('/', (req: Request, res: Response) => {
   const PORT = process.env.PORT || 3000;
   res.status(200).json({ msg: 'Express + TypeScript ChefHub Server', port: PORT });
 });
 
+// userController
 routes.post('/register_user', userController.register);
 routes.post('/login_user', userController.login);
 
-routes.post('/create_ingredient', ingredientController.create); // TODO
+// ingredientController
+routes.post('/create_ingredient', ingredientController.create); // TODO GPT
 routes.post('/delete_ingredient', ingredientController.delete);
-routes.post('/consult_calories', ingredientController.get_calorie); // TODO
+routes.post('/consult_calories', ingredientController.get_calorie); // TODO GPT
 
+// recipeController
 routes.get('/get_shared_recipes', recipeController.get_all_shared_recipes);
 routes.post('/create_recipe', recipeController.create);
 routes.post('/share_recipe', recipeController.share);
