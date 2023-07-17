@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { ingredients_table, users_table } from '../fakeDB';
 import { Ingredient } from '../beans/Ingredient';
+import PromptCreator from '../utils/promptCreator';
+import Consume_GPT_API from '../utils/consume_GPT_API';
 
 
 export default class IngredientController {
@@ -49,23 +51,12 @@ export default class IngredientController {
 
   async get_calorie(req: Request, res: Response) {
     const ingredients: Ingredient[] = req.body.ingredients;
-    const names = ingredients.map((ingredient) => ingredient.name)
-    var template_prompt = `
-    Você é uma calculadora de caloria de qualquer ingrediente. Para realizar suas tarefas, preencha os campos abaixo:\n
-    Exemplo\n
-    - Nome_do_ingrediente <Quantidade opicional de ingrediente> {{preencha aqui}}\n
-    - Macarrão 100g, 371 calorias;\n
-    \n
-    Ingredientes:\n`;
 
-    names.forEach((name) => {
-      template_prompt += "- " + name + "\n"
-    })
+    const prompt = PromptCreator.createCaloriesPrompt(ingredients);
 
-    template_prompt += "Ingredientes com caloria: \n - "
+    const response = await Consume_GPT_API.get_GPT_response(prompt);
+    const lines = response.split('\n').map((linha) => linha.trim());
 
-    // Faz requisição ao chat GPT para receber a caloria
-
-    return res.status(200).json({ msg: 'TODO: não implementado ainda' });
+    return res.status(200).json({ calories: lines, msg: 'Lista de calorias gerada pelo chat GPT' });
   }
 }

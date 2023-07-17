@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { ingredients_table, recipes_table, shared_recipes_table, users_table } from '../fakeDB';
+// import { generateImageFiles, generateImagesLinks } from "bimg";
+import { generateImagesLinks } from '../utils/bimg/imagen';
 import { Recipe } from '../beans/Recipe';
 import { SharedRecipe } from '../beans/SharedRecipe';
+import { Ingredient } from '../beans/Ingredient';
+import PromptCreator from '../utils/promptCreator';
+import Consume_GPT_API from '../utils/consume_GPT_API';
 
 interface shared_recipe_data {
   title: string;
@@ -31,8 +36,8 @@ export default class RecipeController {
         title: recipe_data.title,
         created_by: user_data.email,
         description: shared_recipe.description,
-        image: "TODO: não implementado"
-      })
+        image: shared_recipe.img_link
+      });
     });
 
     return res.status(200).json({ shared_recipes: shared_recipes_data })
@@ -41,33 +46,70 @@ export default class RecipeController {
   async create(req: Request, res: Response) {
     const { user_id, ingredients, preferences } = req.body;
 
-    var template_prompt = `Você é um chef de cozinha renomado que fornece receitas que qualquer pessoa conseguiria fazer. Seu trabalho é levar em consideração os ingredientes e preferências do cliente e gerar uma receita bem detalhada composta de nome, ingredientes e instrução. Você pode acrescentar ou não utilizar ingredientes do cliente. Não acrescente comentários antes e depois da receita.\n
-    \n
-    Considere lista de ingredientes = ["abacate", "tomate", "queijo ralado"]\n
-    O cliente não gosta de guaca mole, gosta de comida japonesa.\n
-    \n
-    Nome da receita {{insira nome aqui}}\n
-    \n
-    Ingredientes:
-    \n
-    - {{Preencha os ingredientes aqui}}\n
-    \n
-    Intruções:\n
-    \n
-    1. {{Preencha instruções aqui}}`;
-    // TODO: requisição para API do chat GPT
-    var title = "";
-    var instructions = [""]; // Faz um processamento do texto de resposta para extrair as instruções
+    const prompt = PromptCreator.createRecipePrompt(ingredients, preferences);
+    const response = await Consume_GPT_API.get_GPT_response(prompt);
 
-    recipes_table.push(new Recipe(recipes_table.length, user_id, title, ingredients, instructions))
+    // Extrai o título, os ingredientes e as instruções do texto response
 
-    res.status(200).json({ msg: 'TODO: não implementaod ainda | New ingredient created!' });
+    // Separa em linhas e título
+    const lines = response.split('\n').map((linha) => linha.trim());
+    const title = lines[0].substring(17);
+
+    // Filtra os ingredientes
+    const start_i = lines.indexOf('Ingredientes:') + 1;
+    const ingredientsAsString: string[] = [];
+    for (let i = start_i; lines[i].at(0) == '-' && i < lines.length; i++) {
+      ingredientsAsString.push(lines[i]);
+    }
+
+    // Separa os ingredientes em (nome, quantidade e unidade de medida)
+    const recipeIngredients: Ingredient[] = [];
+    const regex = /(.+)\[(\d+(?:\.\d+)?)\s*([^\]]+)?\]/;
+    ingredientsAsString.forEach((ingredient) => {
+      const something = ingredient.match(regex);
+      if (something) {
+        const name = something[1].trim();
+        const quantity = something[2] ? something[2].trim() : ''; //parseFloat(something[2]);
+        const unit_measure = something[3] ? something[3].trim() : '';
+
+        recipeIngredients.push(
+          new Ingredient(user_id, name, quantity, unit_measure)
+        );
+      } else {
+        console.log(`Ingrediente ${ingredient} veio no formato errado`);
+      }
+    });
+
+    // Filtra as instruções
+    const start_j = lines.indexOf('Instruções:') + 1;
+    const instructions: string[] = [];
+    const isNumeric = (text: any) => { return !isNaN(text) };
+    for (let j = start_j; isNumeric(lines[j].at(0)) && j < lines.length; j++) {
+      instructions.push(lines[j]);
+    }
+
+    recipes_table.push(
+      new Recipe(recipes_table.length, user_id, title, recipeIngredients, instructions)
+    );
+
+    res.status(200).json({
+      title,
+      ingredientes: recipeIngredients,
+      instructions,
+      msg: 'New recipe created!'
+    });
   }
 
   async share(req: Request, res: Response) {
     const { user_id, recipe_id, description } = req.body;
 
-    shared_recipes_table.push(new SharedRecipe(user_id, recipe_id, description))
+    const recipe = recipes_table[recipe_id];
+
+    const prompt = PromptCreator.createShareRecipePrompt(recipe.title);
+    const imageLinks = await generateImagesLinks(prompt);
+    // const imageFiles = await generateImageFiles(prompt);
+
+    shared_recipes_table.push(new SharedRecipe(user_id, recipe_id, description, imageLinks[0]));
 
     return res.status(200).json({ msg: 'Receita compartilhada!' });
   }

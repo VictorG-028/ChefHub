@@ -3,7 +3,7 @@
 
 Figma: https://www.figma.com/file/O98HiGqkhaBn6RxM3F0ukH/Prot%C3%B3tipo?type=design&mode=design
 Trello: https://trello.com/b/wx34aFsO/chefhub
-Repositório do backend:
+Repositório do backend: https://github.com/VictorG-028/ChefHub-Backend
 Repositório do frontend web:
 Repositório do frontend mobile:
 
@@ -16,5 +16,6 @@ Links de aprendizado usados nesse projeto
 6- https://github.com/nociza/Bimg/tree/main
 7- https://www.youtube.com/watch?v=LjJFu6Y6MrU
 8- https://www.youtube.com/watch?v=pvrKHpXGO8E
-9- ???
+9- https://supabase.com/docs/guides/auth
+https://stackoverflow.com/questions/72300047/uploading-base64-images-to-supabase
 -->
