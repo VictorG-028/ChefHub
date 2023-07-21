@@ -46,8 +46,8 @@ export default class RecipeController {
         .json({ msg, sharedRecipesData: [] });
     }
 
-    const allRecipeIds = allSharedRecipes.map((sr) => { sr.recipe_id });
-    const allUserIds = allSharedRecipes.map((sr) => { sr.user_id });
+    const allRecipeIds = allSharedRecipes.map((sr) => sr.recipe_id);
+    const allUserIds = allSharedRecipes.map((sr) => sr.user_id);
 
     // Selecting Recipes data
     const { data: recipesData, error: selectRError } = await supabase
@@ -55,6 +55,8 @@ export default class RecipeController {
       .select(`title`)
       .in('id', allRecipeIds);
     if (!recipesData || selectRError) {
+      // console.log(allSharedRecipes);
+      console.log(selectRError);
       const msg = "[RecipeController.getAllSharedRecipes] Error selecting recipe data";
       return res.status(500).json({ msg, sharedRecipesData: [] });
     }
@@ -222,12 +224,13 @@ export default class RecipeController {
     const remainIngredients = [];
     const missingIngredients = [];
     const zeroedIngredientes = [];
-
+    console.log(recipeIngredients);
+    console.log(inventoryIngredients);
     for (const recipeIngredient of recipeIngredients) {
-
+      console.log(recipeIngredient);
       // Pass ingredients that doesn't have a defined quantity
       if (parseToCompare(recipeIngredient.quantity) === "a gosto"
-        || recipeIngredient.quantity.length) {
+        || !recipeIngredient.quantity.length) {
         continue
       }
 
