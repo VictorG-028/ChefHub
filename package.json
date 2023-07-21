@@ -3,6 +3,10 @@
   "version": "0.1",
   "description": "Backend do projeto ChefHub. Utiliza TypeScript + NodeJS + Express + Nodemon + Concurrently + Jest. Faz uso de TDD e MySQL.",
   "scripts": {
+    "import_db_changes_from_remote": "npx supabase db remote commit",
+    "apply_db_changes": "npx supabase db reset",
+    "gen_supabase_types": "npx supabase gen types typescript --local > src/lib/database.types.ts",
+    "update_db": "npx supabase db remote commit && npx supabase db reset && npx supabase gen types typescript --local > src/lib/database.types.ts",
     "build": "npx tsc",
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
@@ -20,14 +24,17 @@
     "concurrently": "^8.2.0",
     "jest": "^25.0.0",
     "nodemon": "^3.0.0",
+    "supabase": "^1.77.9",
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.26.0",
     "axios": "^1.4.0",
     "bimg": "^0.1.5",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "json5": "^2.2.3",
     "openai": "^3.3.0",
     "openai-edge": "^1.2.0",
     "uuid": "^9.0.0"

@@ -1,115 +1,192 @@
 import { Request, Response } from 'express';
-import { ingredients_table, recipes_table, shared_recipes_table, users_table } from '../fakeDB';
 // import { generateImageFiles, generateImagesLinks } from "bimg";
 import { generateImagesLinks } from '../utils/bimg/imagen';
-import { Recipe } from '../beans/Recipe';
-import { SharedRecipe } from '../beans/SharedRecipe';
-import { Ingredient } from '../beans/Ingredient';
+import JSON5 from 'json5'
 import PromptCreator from '../utils/promptCreator';
+import supabase from '../database';
 import Consume_GPT_API from '../utils/consume_GPT_API';
+import { parseToCompare } from '../utils/strOperations';
 
-interface shared_recipe_data {
+
+interface SharedRecipeData {
   title: string;
   created_by: string;
   description: string;
   image: string;
 }
 
+interface ResponseIngredient {
+  // id?: number
+  // user_id?: string,
+  nome: string;
+  quantidade: string;
+  unidade_de_medida: string;
+}
+
+interface ResponseRecipe {
+  error?: string;
+  // id?: number,
+  // user_id?: string,
+  nome: string;
+  componentes: ResponseIngredient[];
+  passos: string[];
+}
+
 export default class RecipeController {
 
-  async get_all_shared_recipes(req: Request, res: Response) {
-    var shared_recipes_data: shared_recipe_data[] = [];
+  async getAllSharedRecipes(req: Request, res: Response) {
 
-    shared_recipes_table.forEach((shared_recipe) => {
+    // Selecting shared recipes
+    const { data: allSharedRecipes, error: selectSRError } = await supabase
+      .from('SharedRecipe')
+      .select('*');
+    if (selectSRError) {
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting shared recipes";
+      return res.status(500)
+        .json({ msg, sharedRecipesData: [] });
+    }
 
-      const recipe_data = recipes_table.find((recipe) => recipe.id == shared_recipe.recipe_id)
-      if (!recipe_data) {
-        return res.status(500).json({ msg: "Error desconhecido" })
-      }
+    const allRecipeIds = allSharedRecipes.map((sr) => { sr.recipe_id });
+    const allUserIds = allSharedRecipes.map((sr) => { sr.user_id });
 
-      const user_data = users_table.find((user) => user.id == shared_recipe.user_id)
-      if (!user_data) {
-        return res.status(500).json({ msg: "Error desconhecido" })
-      }
+    // Selecting Recipes data
+    const { data: recipesData, error: selectRError } = await supabase
+      .from('Recipe')
+      .select(`title`)
+      .in('id', allRecipeIds);
+    if (!recipesData || selectRError) {
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting recipe data";
+      return res.status(500).json({ msg, sharedRecipesData: [] });
+    }
 
-      shared_recipes_data.push({
-        title: recipe_data.title,
-        created_by: user_data.email,
-        description: shared_recipe.description,
-        image: shared_recipe.img_link
-      });
+    // Selecting users data
+    const { data: usersData, error: selectUError } = await supabase
+      .from('User')
+      .select(`email`)
+      .in('id', allUserIds);
+    if (!usersData || selectUError) {
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting user data";
+      return res.status(500).json({ msg, sharedRecipesData: [] });
+    }
+
+    // zip as informações em um único array
+    const sharedRecipesData: SharedRecipeData[] = allSharedRecipes.map((sr, i) => {
+      return {
+        title: recipesData[i].title,
+        created_by: usersData[i].email,
+        description: sr.description,
+        image: sr.img_link
+      };
     });
 
-    return res.status(200).json({ shared_recipes: shared_recipes_data })
+    return res.status(200)
+      .json({
+        msg: 'SharedRecipe data collected successfuly!',
+        sharedRecipesData
+      });
   }
 
   async create(req: Request, res: Response) {
     const { user_id, ingredients, preferences } = req.body;
 
     const prompt = PromptCreator.createRecipePrompt(ingredients, preferences);
-    const response = await Consume_GPT_API.get_GPT_response(prompt);
+    const raw_response = await Consume_GPT_API.get_GPT_response(prompt, 1);
+    // console.log(raw_response)
+    // console.log("<-----------------------------");
+    // console.log(JSON5.stringify(raw_response))
+    // console.log("<-----------------------------");
+    // console.log(JSON5.parse(raw_response))
+    const response: ResponseRecipe = JSON5.parse(raw_response);
+
+    // console.log(response.nome);
+    // console.log(response.componentes);
+    // console.log(response.passos);
+    // console.log("aqui <-----------------------------");
+    if (response.error) {
+      const msg = "error -> " + response.error;
+      return res.status(500).json({ msg });
+    }
 
     // Extrai o título, os ingredientes e as instruções do texto response
 
-    // Separa em linhas e título
-    const lines = response.split('\n').map((linha) => linha.trim());
-    const title = lines[0].substring(17);
-
-    // Filtra os ingredientes
-    const start_i = lines.indexOf('Ingredientes:') + 1;
-    const ingredientsAsString: string[] = [];
-    for (let i = start_i; lines[i].at(0) == '-' && i < lines.length; i++) {
-      ingredientsAsString.push(lines[i]);
-    }
-
-    // Separa os ingredientes em (nome, quantidade e unidade de medida)
-    const recipeIngredients: Ingredient[] = [];
-    const regex = /(.+)\[(\d+(?:\.\d+)?)\s*([^\]]+)?\]/;
-    ingredientsAsString.forEach((ingredient) => {
-      const something = ingredient.match(regex);
-      if (something) {
-        const name = something[1].trim();
-        const quantity = something[2] ? something[2].trim() : ''; //parseFloat(something[2]);
-        const unit_measure = something[3] ? something[3].trim() : '';
-
-        recipeIngredients.push(
-          new Ingredient(user_id, name, quantity, unit_measure)
-        );
-      } else {
-        console.log(`Ingrediente ${ingredient} veio no formato errado`);
-      }
-    });
+    // Extraí título
+    const title = response["nome"];
 
     // Filtra as instruções
-    const start_j = lines.indexOf('Instruções:') + 1;
-    const instructions: string[] = [];
-    const isNumeric = (text: any) => { return !isNaN(text) };
-    for (let j = start_j; isNumeric(lines[j].at(0)) && j < lines.length; j++) {
-      instructions.push(lines[j]);
+    const instructions: string[] = response["passos"];
+    const instructionsAsStr: string = response["passos"].join("@");
+
+    // Armazena receita no banco de dados
+    const { data, error: errorRInsert } = await supabase
+      .from('Recipe')
+      .upsert(
+        { user_id, title, instructions: instructionsAsStr },
+        { count: "exact" })
+      .select();
+    if (errorRInsert) {
+      const msg = "[RecipeController.create] Error inserting new recipe";
+      return res.status(500)
+        .json({ msg, id: -1 });
+    }
+    const recipe_id = data[0].id;
+
+    // Filtra os ingredientes
+    const recipeIngredients = response.componentes.map((ingredient) => {
+      return {
+        recipe_id,
+        name: ingredient.nome,
+        quantity: ingredient.quantidade,
+        unit_measure: ingredient.unidade_de_medida,
+      };
+    });
+
+    // Armazena ingredientes da receita no banco de dados
+    const { error: errorIInsert } = await supabase
+      .from('RecipeIngredient')
+      .insert(
+        recipeIngredients,
+        { count: "exact" });
+    if (errorIInsert) {
+      const msg = "[RecipeController.create] Error inserting recipe ingredients";
+      return res.status(500)
+        .json({ msg, id: -1 });
     }
 
-    recipes_table.push(
-      new Recipe(recipes_table.length, user_id, title, recipeIngredients, instructions)
-    );
-
-    res.status(200).json({
+    return res.status(200).json({
+      msg: 'New recipe created!',
+      recipe_id,
       title,
       ingredientes: recipeIngredients,
-      instructions,
-      msg: 'New recipe created!'
+      instructions: instructions
     });
   }
 
   async share(req: Request, res: Response) {
     const { user_id, recipe_id, description } = req.body;
 
-    const recipe = recipes_table[recipe_id];
+    // Seleciona título da receita para usar no prompt da imagem
+    const { data: recipeData, error: selectError } = await supabase
+      .from('Recipe')
+      .select(`title`)
+      .eq('id', recipe_id);
+    if (selectError) {
+      const msg = "[RecipeController.share] Error selecting recipe title";
+      return res.status(500).json(msg);
+    }
 
-    const prompt = PromptCreator.createShareRecipePrompt(recipe.title);
+    // Gera uma imagem para a receita
+    const prompt = PromptCreator.createShareRecipePrompt(recipeData[0].title);
     const imageLinks = await generateImagesLinks(prompt);
     // const imageFiles = await generateImageFiles(prompt);
 
-    shared_recipes_table.push(new SharedRecipe(user_id, recipe_id, description, imageLinks[0]));
+    // Insere na tabela a receita compartilhada
+    const { error: insertError } = await supabase
+      .from('SharedRecipe')
+      .insert({ user_id, recipe_id, description, img_link: imageLinks[0] });
+    if (insertError) {
+      const msg = "[RecipeController.share] Error inserting shared recipe";
+      return res.status(500).json(msg);
+    }
 
     return res.status(200).json({ msg: 'Receita compartilhada!' });
   }
@@ -117,50 +194,93 @@ export default class RecipeController {
   async computeIngredientsDifenteToActualInventory(req: Request, res: Response) {
     const { user_id, recipe_id } = req.body;
 
-    const recipe = recipes_table.find((recipe) => recipe.id == recipe_id);
-    if (!recipe) {
-      return res.status(404).json({ msg: "Receita inexistente" })
+    // Carrega os ingredientes do iventário do usuário
+    const { data: inventoryIngredients, error: selectIIError } = await supabase
+      .from('InventoryIngredient')
+      .select('name, quantity, unit_measure')
+      .eq('user_id', user_id);
+    if (selectIIError) {
+      const msg = "[RecipeController.compute...Inventory] Error selecting all columns from Recipe table";
+      return res.status(500).json({ msg });
+    }
+
+    // Carrega os ingredientes da receita
+    const { data: recipeIngredients, error: selectRIError } = await supabase
+      .from('RecipeIngredient')
+      .select('name, quantity, unit_measure')
+      .eq('recipe_id', recipe_id);
+    if (selectRIError) {
+      const msg = "[RecipeController.compute...Inventory] Error selecting all columns from Recipe table";
+      return res.status(500).json({ msg });
     }
 
     // Verificar se o usuário é o dono da receita
-    if (user_id == recipe.user_id) {
-      return res.status(401).json({ msg: 'Usuário não autorizado' });
-    }
-
-    const user_inventory = ingredients_table.filter((i) => i.user_id == user_id);
-    const recipe_needs = recipe.ingredients;
-
-    var remain_ingredients = [];
-    var missing_ingredients = [];
-    var zeroed_ingredientes = [];
-    // const ingredients_types = {
-    //   "remain": [],
-    //   "missing": [],
-    //   "zeroed": [],
+    // if (user_id == recipe.user_id) {
+    //   return res.status(401).json({ msg: 'Usuário não autorizado' });
     // }
-    for (const recipe_ingredient of recipe_needs) {
-      const foundIngredient = user_inventory.find(
-        (inventory_ingredient) =>
-          inventory_ingredient.name === recipe_ingredient.name &&
-          inventory_ingredient.unit_measure === recipe_ingredient.unit_measure
+
+    const remainIngredients = [];
+    const missingIngredients = [];
+    const zeroedIngredientes = [];
+
+    for (const recipeIngredient of recipeIngredients) {
+
+      // Pass ingredients that doesn't have a defined quantity
+      if (parseToCompare(recipeIngredient.quantity) === "a gosto"
+        || recipeIngredient.quantity.length) {
+        continue
+      }
+
+      // Inner loop
+      const foundIngredient = inventoryIngredients.find(
+        (invIngredient) =>
+          parseToCompare(invIngredient.name) === parseToCompare(recipeIngredient.name) &&
+          parseToCompare(invIngredient.unit_measure) === parseToCompare(recipeIngredient.unit_measure)
       );
-      if (!foundIngredient) continue // search;
 
-      const recipe_quantity = Number.parseFloat(recipe_ingredient.quantity)
-      const inventory_quantity = Number.parseFloat(foundIngredient.quantity)
+      // Push the ingredient to one of 3 arrays
 
-      if (inventory_quantity > recipe_quantity) {
+      if (!foundIngredient) {
+        missingIngredients.push({
+          name: recipeIngredient.name,
+          balance: Number.parseFloat(recipeIngredient.quantity),
+          unit_measure: recipeIngredient.unit_measure
+        });
+        continue
+      }
+
+      const recipeQuantity = Number.parseFloat(recipeIngredient.quantity)
+      const inventoryQuantity = Number.parseFloat(foundIngredient.quantity)
+
+      if (inventoryQuantity > recipeQuantity) {
         // Sobra ingrediente
-        remain_ingredients.push({ name: recipe_ingredient.name, balance: inventory_quantity - recipe_quantity });
-      } else if (inventory_quantity < recipe_quantity) {
+        remainIngredients.push({
+          name: recipeIngredient.name,
+          balance: inventoryQuantity - recipeQuantity,
+          unit_measure: recipeIngredient.unit_measure
+        });
+      } else if (inventoryQuantity < recipeQuantity) {
         // Falta ingrediente
-        missing_ingredients.push({ name: recipe_ingredient.name, balance: inventory_quantity - recipe_quantity });
+        missingIngredients.push({
+          name: recipeIngredient.name,
+          balance: inventoryQuantity - recipeQuantity,
+          unit_measure: recipeIngredient.unit_measure
+        });
       } else {
         // Zera a quantidade do ingrediente
-        zeroed_ingredientes.push({ name: recipe_ingredient.name, balance: inventory_quantity - recipe_quantity });
+        zeroedIngredientes.push({
+          name: recipeIngredient.name,
+          balance: inventoryQuantity - recipeQuantity,
+          unit_measure: recipeIngredient.unit_measure
+        });
       }
     }
 
-    return res.status(200).json({ missing_ingredients, remain_ingredients, zeroed_ingredientes });
+    return res.status(200).json({
+      msg: "Difference computed!",
+      missingIngredients,
+      remainIngredients,
+      zeroedIngredientes
+    });
   }
 }

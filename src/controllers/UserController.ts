@@ -1,41 +1,78 @@
 import { Request, Response } from 'express';
-import { users_table } from '../fakeDB';
-import { User } from '../beans/User';
 import { v4 as uuidv4 } from 'uuid';
+import supabase from '../database';
+import User from '../beans/User';
 
 export default class UserController {
+  async get_all(req: Request, res: Response) {
+    const { data, error } = await supabase.from('User').select('*');
+    if (error) {
+      const msg = "[UserController.register] Error selecting all users";
+      return res.status(500).json({ msg, data });
+    }
+    return res.status(200).json({ msg: "sucesso", data });
+  }
 
   async register(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const { email, password }: User = req.body;
 
-    const isRepeated = users_table.filter((user) => user.email === email).length > 0;
-
-    if (isRepeated) {
-      res.status(400).json({ msg: 'Email already in use', id: -1 });
-    } else {
-      users_table.push(new User(uuidv4(), email, password));
-      res.status(200).json({ msg: 'New user created!', id: users_table[users_table.length - 1].id });
+    // Select repeated emails
+    const { data: users_with_equal_email, error: selectError } = await supabase
+      .from('User')
+      .select(`email`)
+      .eq('email', email);
+    if (selectError) {
+      const msg = "[UserController.register] Error checking email uniqueness";
+      return res.status(500)
+        .json({ msg, id: -1 });
     }
+
+    // Check for repeated email
+    const isRepeated = users_with_equal_email.length > 0;
+    if (isRepeated) {
+      const msg = "[UserController.register] Email already in use";
+      return res.status(400)
+        .json({ msg, id: -1 });
+    }
+
+    // Create new user
+    const id = uuidv4()
+    const { error: insertError } = await supabase
+      .from('User')
+      .insert({ id, email, password });
+    if (insertError) {
+      console.log(insertError);
+      const msg = "[UserController.register] Error inserting new user";
+      return res.status(500)
+        .json({ msg, id: -1 });
+    }
+
+    return res.status(200)
+      .json({ msg: 'New user created!', id });
   }
 
   async login(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const { email, password }: User = req.body;
 
-    // const isEmailCorrect = users_table.filter((user) => user.email === email && user.password == password);
-    // const isPasswordCorrect = users_table.find((user) => user.password == password);
-    const user = users_table.find((user) => user.email === email);
-
-    if (!user) {
-      // Caso não exista um usuário com o email fornecido
-      return res.status(401).json({ msg: 'Credenciais inválidas', id: -1 });
+    // Select existing user
+    const { data: existing_user, error: selectError } = await supabase
+      .from('User')
+      .select(`*`)
+      .eq('email', email)
+      .eq('password', password);
+    if (selectError) {
+      return res.status(500)
+        .json({ msg: 'Error selecting existing user', id: -1 });
     }
 
-    if (user.password !== password) {
-      // Caso a senha fornecida não corresponda à senha do usuário
-      return res.status(401).json({ msg: 'Credenciais inválidas', id: -1 });
+    // Check for valid credentials
+    if (!existing_user) {
+      return res.status(401)
+        .json({ msg: 'Invalid Email or Password', id: -1 });
     }
 
     // Se chegou até aqui, significa que o login foi bem-sucedido
-    return res.status(200).json({ msg: 'Login bem-sucedido', id: user.id });
+    return res.status(200)
+      .json({ msg: 'Login bem-sucedido', id: existing_user[0].id });
   }
 }
