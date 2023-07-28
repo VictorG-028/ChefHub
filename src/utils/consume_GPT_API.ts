@@ -1,5 +1,5 @@
 import { error } from "console";
-import { Configuration, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 
 // https://github.com/openai/openai-node
 const configuration = new Configuration({
@@ -10,15 +10,14 @@ const openai = new OpenAIApi(configuration);
 
 export default class Consume_GPT_API {
 
-  static async get_GPT_response(prompt: string, temperature: number): Promise<string> {
+  static async get_GPT_response(
+    messages: ChatCompletionRequestMessage[],
+    temperature: number
+  ): Promise<string> {
+
     const chatCompletion: any = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
+      messages: messages,
       temperature
     });
     const content = chatCompletion.data.choices[0].message.content;

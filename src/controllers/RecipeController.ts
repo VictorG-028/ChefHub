@@ -91,8 +91,9 @@ export default class RecipeController {
   async create(req: Request, res: Response) {
     const { user_id, ingredients, preferences } = req.body;
 
-    const prompt = PromptCreator.createRecipePrompt(ingredients, preferences);
-    const raw_response = await Consume_GPT_API.get_GPT_response(prompt, 1);
+    const temperature = 1;
+    const messages = PromptCreator.createRecipePrompt(ingredients, preferences);
+    const raw_response = await Consume_GPT_API.get_GPT_response(messages, temperature);
     // console.log(raw_response)
     // console.log("<-----------------------------");
     // console.log(JSON5.stringify(raw_response))

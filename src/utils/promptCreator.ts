@@ -1,6 +1,4 @@
-// TODO: refatorar para deixar a lógica de preencher os prompts aqui
-// tirar as strings grandes do prompt das outras partes do codigo minimiza bastante o que precisa ser lido
-
+import { ChatCompletionRequestMessage } from "openai";
 import Ingredient from "../beans/Ingredient";
 import InventoryIngredient from "../beans/InventoryIngredient";
 import RecipeIngredient from "../beans/RecipeIngredient";
@@ -8,7 +6,11 @@ import RecipeIngredient from "../beans/RecipeIngredient";
 
 export default class PromptCreator {
 
-  static createRecipePrompt(ingredients: InventoryIngredient[], preferences: string[]): string {
+  static createRecipePrompt(
+    ingredients: InventoryIngredient[],
+    preferences: string[],
+    shouldConcatenatePrompt = false
+  ): ChatCompletionRequestMessage[] {
 
     const ingredientsToInject: string = ingredients.map((i) => {
       return `{"nome": ${i.name}, "quantidade": ${i.quantity}, "unidade_de_medida": ${i.unit_measure}}\n`
@@ -76,14 +78,26 @@ export default class PromptCreator {
         ]
       }`;
 
-    const template_prompt = `User: ${user_1}
+    const concatenatedPrompt = `User: ${user_1}
       Response: ${system_1}
       User: ${user_2}
       Response: ${system_2}
       User: ${user_3}
     `;
 
-    return template_prompt;
+    const messages: ChatCompletionRequestMessage[] = shouldConcatenatePrompt
+      ? [
+        { role: "user", content: concatenatedPrompt }
+      ]
+      : [
+        { role: "user", content: user_1 },
+        { role: "system", content: system_1 },
+        { role: "user", content: user_2 },
+        { role: "system", content: system_2 },
+        { role: "user", content: user_3 },
+      ];
+
+    return messages;
   }
 
   // InventoryIngredient[] | RecipeIngredient[]
