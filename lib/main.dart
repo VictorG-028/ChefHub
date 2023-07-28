@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:chefhub/src/View/login__page_view.dart';
+import 'package:chefhub/src/View/login_page_view.dart';
+import 'package:chefhub/src/View/register_page_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +15,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'ChefHub',
         initialRoute: LoginPage.routeName,
-        routes: {LoginPage.routeName: (context) => const LoginPage()});
+        routes: {LoginPage.routeName: (context) => const LoginPage(),
+        RegisterPage.routeName: (context) => const RegisterPage(),
+        });
   }
 }

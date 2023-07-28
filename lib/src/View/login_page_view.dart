@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:chefhub/src/components/custom_text_form_field.dart';
 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
   static const routeName = '/login';
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 50),
             TextButton(
-                onPressed: () {},
+                onPressed: () => Navigator.popAndPushNamed(context, '/register'),
                 child: const Text(
                   'Não possui uma conta? CRIAR CONTA',
                   style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 113, 79, 79)),
