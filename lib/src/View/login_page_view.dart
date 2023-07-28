@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                   textStyle: MaterialStatePropertyAll(TextStyle(fontSize: 16)),
                   fixedSize: MaterialStatePropertyAll(Size(180, 40)),
                   backgroundColor: MaterialStatePropertyAll(Color(0xff493C36))),
-              onPressed: () {},
+              onPressed: () => Navigator.popAndPushNamed(context, '/home'),
               child: const Text('Entrar'),
             ),
             const SizedBox(height: 50),
