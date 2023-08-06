@@ -70,7 +70,7 @@ export default class UserController {
       return res.status(401)
         .json({ msg: 'Invalid Email or Password', id: -1 });
     }
-
+    console.log(existing_user);
     // Se chegou até aqui, significa que o login foi bem-sucedido
     return res.status(200)
       .json({ msg: 'Login bem-sucedido', id: existing_user[0].id });

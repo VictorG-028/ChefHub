@@ -27,11 +27,11 @@
 
     3.2. Certifique-se de que o WSL está atualizado com o comando `wsl --update` em qualquer terminal.
 
-    3.3. Certifique-se de que o Docker Desktop está baixado e em execução. Você pode baixá-lo [aqui](https://www.docker.com/products/docker-desktop/).
+    3.3. Certifique-se de que o Docker Desktop está baixado e o container do Supabase está em execução. Você pode baixá-lo [aqui](https://www.docker.com/products/docker-desktop/).
 
     3.4. Execute `npx supabase link --project-ref <project-id>` para vincular o projeto remoto com o local. Você pode obter `<project-id>` no URL do painel do seu projeto: `https://supabase.com/dashboard/project/<project-id>`.
 
-    3.5. Execute `npx supabase db remote commit` para trazer as mudanças feitas do projeto remoto para o projeto local.
+    3.5. Execute `npm run update_db` para trazer as mudanças feitas do projeto remoto para o projeto local.
 4. Configure as variáveis de ambiente:
 
     4.1. Duplique o arquivo `.env.example` dentro da pasta `CHEFHUB-BACKEND`.
@@ -62,5 +62,6 @@ Links de aprendizado usados nesse projeto
 9- https://supabase.com/docs/guides/auth 
 10- https://stackoverflow.com/questions/72300047/uploading-base64-images-to-supabase
 11- https://supabase.com/docs/reference/javascript/installing
-12 Como instalar supabase CLI: https://github.com/supabase/cli
+12- Como instalar supabase CLI: https://github.com/supabase/cli
+13- https://microsoft.github.io/TypeChat/blog/introducing-typechat/
 -->

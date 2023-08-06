@@ -101,7 +101,7 @@ export default class PromptCreator {
   }
 
   // InventoryIngredient[] | RecipeIngredient[]
-  static createCaloriesPrompt(ingredients: Ingredient[]): string {
+  static createCaloriesPrompt(ingredients: Ingredient[]): ChatCompletionRequestMessage[] {
 
     const ingredientNames = ingredients
       .map((ingredient) => { return '- ' + ingredient.name + '\n' })
@@ -120,7 +120,7 @@ export default class PromptCreator {
     Ingredientes com caloria:
     -`;
 
-    return template_prompt;
+    return [{ role: "user", content: template_prompt }];
   }
 
   static createShareRecipePrompt(recipe_title: string): string {
