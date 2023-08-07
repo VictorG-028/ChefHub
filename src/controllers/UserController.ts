@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, NIL as NIL_UUID } from 'uuid';
 import supabase from '../database';
 import User from '../beans/User';
 
@@ -24,7 +24,7 @@ export default class UserController {
     if (selectError) {
       const msg = "[UserController.register] Error checking email uniqueness";
       return res.status(500)
-        .json({ msg, id: -1 });
+        .json({ msg, id: NIL_UUID });
     }
 
     // Check for repeated email
@@ -32,7 +32,7 @@ export default class UserController {
     if (isRepeated) {
       const msg = "[UserController.register] Email already in use";
       return res.status(400)
-        .json({ msg, id: -1 });
+        .json({ msg, id: NIL_UUID });
     }
 
     // Create new user
@@ -44,7 +44,7 @@ export default class UserController {
       console.log(insertError);
       const msg = "[UserController.register] Error inserting new user";
       return res.status(500)
-        .json({ msg, id: -1 });
+        .json({ msg, id: NIL_UUID });
     }
 
     return res.status(200)
@@ -62,13 +62,13 @@ export default class UserController {
       .eq('password', password);
     if (selectError) {
       return res.status(500)
-        .json({ msg: 'Error selecting existing user', id: -1 });
+        .json({ msg: 'Error selecting existing user', id: NIL_UUID });
     }
 
     // Check for valid credentials
     if (!existing_user) {
       return res.status(401)
-        .json({ msg: 'Invalid Email or Password', id: -1 });
+        .json({ msg: 'Invalid Email or Password', id: NIL_UUID });
     }
     console.log(existing_user);
     // Se chegou até aqui, significa que o login foi bem-sucedido
