@@ -1,5 +1,6 @@
 # Keep environment variables out of version control
 .env
+*with_env_var*
 
 # node
 node_modules/
