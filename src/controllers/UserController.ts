@@ -2,15 +2,20 @@ import { Request, Response } from 'express';
 import { v4 as uuidv4, NIL as NIL_UUID } from 'uuid';
 import supabase from '../database';
 import User from '../beans/User';
+import { PostgrestError } from '@supabase/supabase-js';
 
 export default class UserController {
   async get_all(req: Request, res: Response) {
-    const { data, error } = await supabase.from('User').select('*');
+    const { data: users_data, error } = await supabase
+      .from('User')
+      .select('*') as {
+        data: User[], error: PostgrestError | null
+      };
     if (error) {
       const msg = "[UserController.register] Error selecting all users";
-      return res.status(500).json({ msg, data });
+      return res.status(500).json({ msg, users_data });
     }
-    return res.status(200).json({ msg: "sucesso", data });
+    return res.status(200).json({ msg: "sucesso", users_data });
   }
 
   async register(req: Request, res: Response) {
