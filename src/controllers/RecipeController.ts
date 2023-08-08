@@ -6,16 +6,39 @@ import PromptCreator from '../utils/promptCreator';
 import supabase from '../database';
 import Consume_GPT_API from '../utils/consume_GPT_API';
 import { parseToCompare } from '../utils/strOperations';
+import InventoryIngredient from '../beans/InventoryIngredient';
+import RecipeIngredient from '../beans/RecipeIngredient';
 
 
+// Remember and decide: This interface might go to beans
 interface SharedRecipeData {
   title: string;
   created_by: string;
   description: string;
   image: string;
 }
+interface SharedRecipeResBody extends SharedRecipeData { }
 
-interface ResponseIngredient {
+interface CreateRecipeReqBody {
+  user_id: string,
+  ingredients: InventoryIngredient[],
+  preferences: string[]
+}
+
+interface ShareRecipeReqBody {
+  user_id: string,
+  recipe_id: number,
+  description: string
+}
+
+interface ComputeDifferenceReqBody {
+  user_id: string,
+  recipe_id: number
+}
+
+//////////////////////////////////////////
+
+interface GPT_IngredientResBody {
   // id?: number
   // user_id?: string,
   nome: string;
@@ -23,14 +46,17 @@ interface ResponseIngredient {
   unidade_de_medida: string;
 }
 
-interface ResponseRecipe {
+interface GPT_RecipeResBody {
   error?: string;
   // id?: number,
   // user_id?: string,
   nome: string;
-  componentes: ResponseIngredient[];
+  componentes: GPT_IngredientResBody[];
   passos: string[];
 }
+
+//////////////////////////////////////////
+
 
 export default class RecipeController {
 
@@ -72,7 +98,7 @@ export default class RecipeController {
     }
 
     // zip as informações em um único array
-    const sharedRecipesData: SharedRecipeData[] = allSharedRecipes.map((sr, i) => {
+    const sharedRecipesData: SharedRecipeResBody[] = allSharedRecipes.map((sr, i) => {
       return {
         title: recipesData[i].title,
         created_by: usersData[i].email,
@@ -89,7 +115,7 @@ export default class RecipeController {
   }
 
   async create(req: Request, res: Response) {
-    const { user_id, ingredients, preferences } = req.body;
+    const { user_id, ingredients, preferences }: CreateRecipeReqBody = req.body;
 
     const temperature = 1;
     const messages = PromptCreator.createRecipePrompt(ingredients, preferences);
@@ -99,7 +125,7 @@ export default class RecipeController {
     // console.log(JSON5.stringify(raw_response))
     // console.log("<-----------------------------");
     // console.log(JSON5.parse(raw_response))
-    const response: ResponseRecipe = JSON5.parse(raw_response);
+    const response: GPT_RecipeResBody = JSON5.parse(raw_response);
 
     // console.log(response.nome);
     // console.log(response.componentes);
@@ -159,13 +185,13 @@ export default class RecipeController {
       msg: 'New recipe created!',
       recipe_id,
       title,
-      ingredientes: recipeIngredients,
-      instructions: instructions
+      ingredients: recipeIngredients,
+      instructions
     });
   }
 
   async share(req: Request, res: Response) {
-    const { user_id, recipe_id, description } = req.body;
+    const { user_id, recipe_id, description }: ShareRecipeReqBody = req.body;
 
     // Seleciona título da receita para usar no prompt da imagem
     const { data: recipeData, error: selectError } = await supabase
@@ -194,8 +220,8 @@ export default class RecipeController {
     return res.status(200).json({ msg: 'Receita compartilhada!' });
   }
 
-  async computeIngredientsDifenteToActualInventory(req: Request, res: Response) {
-    const { user_id, recipe_id } = req.body;
+  async computeIngredientsDifferenceToActualInventory(req: Request, res: Response) {
+    const { user_id, recipe_id }: ComputeDifferenceReqBody = req.body;
 
     // Carrega os ingredientes do iventário do usuário
     const { data: inventoryIngredients, error: selectIIError } = await supabase

@@ -1,6 +1,5 @@
 export default interface Ingredient {
   id: number | undefined,
-  user_id: string | undefined,
   name: string,
   quantity: string,
   unit_measure: string,

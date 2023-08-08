@@ -33,6 +33,6 @@ routes.post('/consult_calories', ingredientController.get_calorie);
 routes.get('/get_shared_recipes', recipeController.getAllSharedRecipes);
 routes.post('/create_recipe', recipeController.create);
 routes.post('/share_recipe', recipeController.share);
-routes.post('/check_ingredients_difference', recipeController.computeIngredientsDifenteToActualInventory);
+routes.post('/check_ingredients_difference', recipeController.computeIngredientsDifferenceToActualInventory);
 
 export { routes };

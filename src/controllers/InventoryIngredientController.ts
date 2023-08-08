@@ -3,10 +3,11 @@ import PromptCreator from '../utils/promptCreator';
 import Consume_GPT_API from '../utils/consume_GPT_API';
 import supabase from '../database';
 import Ingredient from '../beans/Ingredient';
+import InventoryIngredient from '../beans/InventoryIngredient';
 
 interface DeleteBody {
   user_id: string,
-  ingredients: Ingredient[]
+  ingredients: InventoryIngredient[]
 }
 
 interface GetCaloryBody {
