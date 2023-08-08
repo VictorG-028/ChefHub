@@ -1,11 +1,12 @@
-# API Documentation
+# 📔 API Documentation
 
-Observations:
-- The file **Insomnia_Request_without_env_var.json** can be loaded in Insomina to show examples of how to use the backend.
+:information_source: Usefull Info:
+- Click on the little arrow next to each route name to expand the route details.
+- **./documentation/Insomnia_Request_without_env_var.json** file can be loaded into Insomnia to manualy test each route.
 - UUID is string type
 - { ... }[] -> array of objects
 
-## User Routes
+## 👥 User Routes
 
 ```typescript
 interface User {
@@ -79,7 +80,7 @@ Logs in an existing user.
 
 </details>
 
-## Ingredient Routes
+## 🧂 Ingredient Routes
 
 ```typescript
 interface Ingredient {
@@ -161,7 +162,7 @@ Retrieves the calorie information for an ingredient.
 
 </details>
 
-## Recipe Routes
+## 📜 Recipe Routes
 
 ```typescript
 interface Recipe {
