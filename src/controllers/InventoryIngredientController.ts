@@ -5,20 +5,53 @@ import supabase from '../database';
 import Ingredient from '../beans/Ingredient';
 import InventoryIngredient from '../beans/InventoryIngredient';
 
-interface DeleteBody {
+// [Start of] Requests body types
+
+interface CreateReqBody {
+  user_id: string,
+  name: string,
+  quantity: string,
+  unit_measure: string
+}
+
+interface DeleteReqBody {
   user_id: string,
   ingredients: InventoryIngredient[]
 }
 
-interface GetCaloryBody {
+interface GetCalorieReqBody {
   ingredients: Ingredient[]
 }
 
+// [End of] Requests body types
+// [Start of] Response body types
+// empty
+// [End of] Response body types
 
 export default class IngredientController {
 
+  async getAll(req: Request, res: Response) {
+    const shouldGetUserId: string = req.params.shouldGetUserId;
+
+    let selectColums = 'name, quantity, unit_measure';
+    if (shouldGetUserId && shouldGetUserId.toLocaleLowerCase() == 'true') {
+      selectColums = 'user_id, name, quantity, unit_measure';
+    }
+
+    const { data: allInvIngredients, error } = await supabase
+      .from('InventoryIngredient')
+      .select(selectColums);
+
+    if (error) {
+      const msg = "[IngredientController] Error selecting all InventoryIngredient";
+      return res.status(500).json({ msg });
+    }
+
+    return res.status(200).json({ msg: "Successfully  returned all Invetory Ingredients", allInvIngredients });
+  }
+
   async create(req: Request, res: Response) {
-    const { user_id, name, quantity, unit_measure }: Ingredient = req.body;
+    const { user_id, name, quantity, unit_measure }: CreateReqBody = req.body;
 
     // // Verificar se o usuário existe
     // const user = users_table.find((user) => user.id === user_id);
@@ -42,7 +75,7 @@ export default class IngredientController {
 
   async delete(req: Request, res: Response) {
     // const { user_id, name, quantity, unit_measure } = req.body;
-    const { user_id, ingredients }: DeleteBody = req.body;
+    const { user_id, ingredients }: DeleteReqBody = req.body;
 
     // Verificar se o usuário existe
     // const user = users_table.find((user) => user.id === user_id);
@@ -67,9 +100,9 @@ export default class IngredientController {
       .from('InventoryIngredient')
       .delete()
       .eq("user_id", user_id)
-      .in("name", ingredients.map((i) => { i.name }))
-      .in("quantity", ingredients.map((i) => { i.quantity }))
-      .in("unit_measure", ingredients.map((i) => { i.unit_measure }));
+      .in("name", ingredients.map((i) => { return i.name }))
+      .in("quantity", ingredients.map((i) => { return i.quantity }))
+      .in("unit_measure", ingredients.map((i) => { return i.unit_measure }));
     // .eq("name", name)
     // .eq("quantity", quantity)
     // .eq("unit_measure", unit_measure);
@@ -81,8 +114,8 @@ export default class IngredientController {
     return res.status(200).json({ msg: 'Ingrediente excluído com sucesso' });
   }
 
-  async get_calorie(req: Request, res: Response) {
-    const { ingredients }: GetCaloryBody = req.body;
+  async consultCalorie(req: Request, res: Response) {
+    const { ingredients }: GetCalorieReqBody = req.body;
 
     const prompt = PromptCreator.createCaloriesPrompt(ingredients);
 

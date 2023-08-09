@@ -9,15 +9,7 @@ import { parseToCompare } from '../utils/strOperations';
 import InventoryIngredient from '../beans/InventoryIngredient';
 import RecipeIngredient from '../beans/RecipeIngredient';
 
-
-// Remember and decide: This interface might go to beans
-interface SharedRecipeData {
-  title: string;
-  created_by: string;
-  description: string;
-  image: string;
-}
-interface SharedRecipeResBody extends SharedRecipeData { }
+// [Start of] Requests body types
 
 interface CreateRecipeReqBody {
   user_id: string,
@@ -36,7 +28,20 @@ interface ComputeDifferenceReqBody {
   recipe_id: number
 }
 
-//////////////////////////////////////////
+// [End of] Requests body types
+// [Start of] Response body types
+
+// Remember and decide: This interface might go to beans
+interface SharedRecipeData {
+  title: string;
+  created_by: string;
+  description: string;
+  image: string;
+}
+interface SharedRecipeResBody extends SharedRecipeData { }
+
+// [End of] Response body types
+
 
 interface GPT_IngredientResBody {
   // id?: number

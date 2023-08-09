@@ -4,8 +4,25 @@ import supabase from '../database';
 import User from '../beans/User';
 import { PostgrestError } from '@supabase/supabase-js';
 
+// [Start of] Requests body types
+
+interface CreateUserReqBody {
+  email: string,
+  password: string
+}
+
+interface LoginUserReqBody {
+  email: string,
+  password: string
+}
+
+// [End of] Requests body types
+// [Start of] Response body types
+// empty
+// [End of] Response body types
+
 export default class UserController {
-  async get_all(req: Request, res: Response) {
+  async getAll(req: Request, res: Response) {
     const { data: users_data, error } = await supabase
       .from('User')
       .select('*') as {
@@ -19,7 +36,7 @@ export default class UserController {
   }
 
   async register(req: Request, res: Response) {
-    const { email, password }: User = req.body;
+    const { email, password }: CreateUserReqBody = req.body;
 
     // Select repeated emails
     const { data: users_with_equal_email, error: selectError } = await supabase
@@ -57,7 +74,7 @@ export default class UserController {
   }
 
   async login(req: Request, res: Response) {
-    const { email, password }: User = req.body;
+    const { email, password }: LoginUserReqBody = req.body;
 
     // Select existing user
     const { data: existing_user, error: selectError } = await supabase
@@ -75,7 +92,7 @@ export default class UserController {
       return res.status(401)
         .json({ msg: 'Invalid Email or Password', id: NIL_UUID });
     }
-    console.log(existing_user);
+
     // Se chegou até aqui, significa que o login foi bem-sucedido
     return res.status(200)
       .json({ msg: 'Login bem-sucedido', id: existing_user[0].id });
