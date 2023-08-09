@@ -2,7 +2,7 @@
 
 :information_source: Usefull Info:
 - Click on the little arrow next to each route name to expand the route details.
-- **./documentation/Insomnia_Request_without_env_var.json** file can be loaded into Insomnia to manualy test each route.
+- [How to use insomnia doc](https://github.com/VictorG-028/ChefHub-Backend/blob/main/documentation/insomnia_guide.md)
 - UUID is string type
 - { ... }[] -> array of objects
 
