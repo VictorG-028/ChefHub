@@ -1,4 +1,6 @@
+import 'package:chefhub/src/components/custom_App_Bar.dart';
 import 'package:flutter/material.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 class CreatinRecipesPage extends StatefulWidget {
   const CreatinRecipesPage({super.key});
@@ -12,19 +14,24 @@ class _CreatinRecipesPageState extends State<CreatinRecipesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back)),
-        actions: [
-          Image.asset(
-            'name',
-            width: AppBar().preferredSize.width - 16,
-            height: AppBar().preferredSize.height - 16,
+      appBar: const CustomAppBar(),
+      body: Column(
+        children: [
+          const Text('Suas Receitas'),
+          DottedBorder(
+            color: Colors.black,
+            strokeWidth: 1,
+            child: Container(
+              height: 200,
+              width: 200,
+              child: IconButton(
+                onPressed: () => Navigator.pushNamed(context, '/ingredients'),
+                icon: Icon(Icons.add),
+              ),
+            ),
           )
         ],
       ),
-      body: const Placeholder(),
     );
   }
 }
