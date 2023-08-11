@@ -16,7 +16,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
       appBar: const CustomAppBar(),
       body: Column(
         children: [
-          Text('Ingredientes'),
+          const Text('Ingredientes'),
           Expanded(
             child: ListView.builder(
               itemCount: 10,
@@ -34,7 +34,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
         ],
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, '/ingredientForm'),
         child: const Text('Adicionar Alimento'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
