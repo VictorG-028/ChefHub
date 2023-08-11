@@ -33,6 +33,13 @@ class _IngredientsPageState extends State<IngredientsPage> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomAppBar(
+        height: 60,
+        child: IconButton(
+          onPressed: () => Navigator.pushNamed(context, '/recipesPreferences'),
+          icon: const Icon(Icons.arrow_forward),
+        ),
+      ),
       floatingActionButton: ElevatedButton(
         onPressed: () => Navigator.pushNamed(context, '/ingredientForm'),
         child: const Text('Adicionar Alimento'),
