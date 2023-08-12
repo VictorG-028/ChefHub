@@ -1,0 +1,27 @@
+.userRecipiesBody {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.title {
+  margin-top: 12rem;
+  display: flex;
+  justify-content: center;
+}
+
+.userRecipiesCard {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-left: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 30%;
+  background-color: var(--color-detail);
+}
+
+.userRecipiesCard a {
+    color: var(--color-principal-2);
+    font-weight: 700;
+}

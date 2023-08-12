@@ -1,0 +1,54 @@
+.ingredientsBody {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.title {
+  margin-top: 12rem;
+  display: flex;
+  justify-content: center;
+}
+
+.checkboxFilter {
+  display: flex;
+  background-color: var(--color-detail);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 1rem;
+  cursor: pointer;
+  width: 30%;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.checkboxFilter:has(input:checked) {
+  background-color: var(--color-detail-2);
+  color: var(--color-default);
+}
+
+.checkboxFilter input {
+  display: none;
+}
+
+.footer {
+  margin: 2rem 2rem 4rem 2rem;
+}
+
+.ingredientsButtons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.deleteButton {
+  background-color: var(--color-principal-2);
+  color: var(--color-principal);
+}
+
+.addIngredientButton {
+  background-color: var(--color-detail-3);
+}
+
+.nextButton {
+  background-color: var(--color-detail-2);
+}
