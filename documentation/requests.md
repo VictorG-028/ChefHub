@@ -1,10 +1,58 @@
 # 📔 API Documentation
 
 :information_source: Usefull Info:
+- Pode ajudar a entender as rotas :point_right: [Video enviado na entrega do backend](https://www.youtube.com/watch?v=zdY9avCcq_c) 
 - Click on the little arrow next to each route name to expand the route details.
 - [How to use insomnia doc](https://github.com/VictorG-028/ChefHub-Backend/blob/main/documentation/insomnia_guide.md)
 - UUID is string type
 - { ... }[] -> array of objects
+
+### Como usar esse arquivo para escrever o código
+
+Usando o axios ou flutter https module é possível fazer uma requisição POST ou GET.
+
+Nas requisições POST é necessário passar um body em formato JSON com os campos de input listados nesse arquivo.
+Cada requisição usa tem uma rota do backend. Requisição é sinônimo de Rota.
+
+Exemplo prático na requisição de criar usuário:
+
+- **Route:** `POST /register_user`
+Observando a informação da rota, é preciso fazer um POST localhost.com/register_user
+
+- **JSON input:**
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+Observando inputs, é preciso enviar no body algo assim. 
+Os nomes email e password são obrigatórios e se tiverem um erro de digitação, vai gerar variáveis undefined e, consequentemente, um erro no backend.
+```javascript
+const body = {email: "string email aqui", password: "string password aqui"}
+```
+
+- **JSON output:**
+```json
+{
+  "msg": "string",
+  "id": "string"
+}
+```
+Observando output, é preciso acessar o objeto de resposta mais ou menos assim:
+```javascript
+const raw_response = await create_user(...);
+const response = json.parse(raw_response);
+
+// Acessando propriedade como se fosse uma instância de uma classe
+const msg = response.msg;
+const id = response.id;
+// Acessando propriedade como se fosse uma dicionário em python
+const msg = response["msg"];
+const id = response["id"];
+```
+
+---
 
 ## 👥 User Routes
 
