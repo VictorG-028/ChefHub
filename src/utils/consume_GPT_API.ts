@@ -1,4 +1,3 @@
-import { error } from "console";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 
 // https://github.com/openai/openai-node

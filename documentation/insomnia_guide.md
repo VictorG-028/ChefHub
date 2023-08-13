@@ -14,8 +14,7 @@
 ```json 
 {
 	"GPT_API_KEY": "fill key here",
-  "BING_IMAGE_COOKIE": "fill cookie _U pode ser encontrado no Dev Tools F12, na aba Aplicativo ao estar logado no bimg img creator",
-	"BING_URL": "https://www.bing.com/images/create?q=bolo-de-chocolate&rt=3&FORM=GENCRE"
+  "BING_IMAGE_COOKIE": "fill cookie _U pode ser encontrado no Dev Tools F12, na aba Aplicativo ao estar logado no bimg img creator"
 }
 ```
 
