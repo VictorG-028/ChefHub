@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:chefhub/src/components/custom_text_form_field.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import '../model/user_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -80,6 +82,9 @@ class _LoginPageState extends State<LoginPage> {
         context, emailInputController.text, passwordInputController.text);
 
     print("AQUI meio");
+    final userIdProvider = Provider.of<UserProvider>(context, listen: false);
+    userIdProvider.setUserId(_userId);
+
     if (_userId != "0") {
       print("AQUI depois");
       Navigator.popAndPushNamed(context, '/home');

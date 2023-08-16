@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../model/user_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +13,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final String userId = userProvider.id;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -30,7 +35,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: const Placeholder(),
+      body: Placeholder(
+        child: Center(
+          child: Text("User id is '$userId'"),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/creatingRecipes'),
         child: const Icon(Icons.restaurant_menu, size: 30),
