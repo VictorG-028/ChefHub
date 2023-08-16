@@ -21,12 +21,12 @@ class _CreatinRecipesPageState extends State<CreatinRecipesPage> {
           DottedBorder(
             color: Colors.black,
             strokeWidth: 1,
-            child: Container(
+            child: SizedBox(
               height: 200,
               width: 200,
               child: IconButton(
                 onPressed: () => Navigator.pushNamed(context, '/ingredients'),
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
               ),
             ),
           )

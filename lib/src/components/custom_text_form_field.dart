@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final String label;
   final IconData? icon;
   final String? Function(String?)? validator;
+  final TextEditingController? textController;
 
   const CustomTextFormField(
       {super.key,
@@ -13,7 +14,8 @@ class CustomTextFormField extends StatelessWidget {
       this.validator,
       this.isObscure = false,
       required this.label,
-      this.icon});
+      this.icon,
+      this.textController});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,12 @@ class CustomTextFormField extends StatelessWidget {
         children: [
           Text(
             fieldTitle,
-            style: const TextStyle(color: Color.fromARGB(255, 82, 82, 92),
-            fontSize: 18),
+            style: const TextStyle(
+                color: Color.fromARGB(255, 82, 82, 92), fontSize: 18),
           ),
           const SizedBox(height: 5),
           TextFormField(
+            controller: textController,
             obscureText: isObscure,
             validator: validator,
             decoration: InputDecoration(

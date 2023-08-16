@@ -14,19 +14,23 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () => {},
           icon: const Icon(Icons.account_circle_outlined),
           iconSize: AppBar().preferredSize.height - 16,
         ),
         actions: [
-          Image.asset(
-            'name',
-            width: AppBar().preferredSize.width - 16,
-            height: AppBar().preferredSize.height - 16,
-          )
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'lib/assets/ChefHubIcon.png',
+              width: AppBar().preferredSize.height - 16,
+              height: AppBar().preferredSize.height - 16,
+              fit: BoxFit.contain,
+            ),
+          ),
         ],
       ),
-      body: Placeholder(),
+      body: const Placeholder(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/creatingRecipes'),
         child: const Icon(Icons.restaurant_menu, size: 30),
