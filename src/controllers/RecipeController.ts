@@ -40,6 +40,11 @@ interface SharedRecipeData {
 }
 interface SharedRecipeResBody extends SharedRecipeData { }
 
+interface RecipeResBody {
+  title: string;
+  ingredients: RecipeIngredient[];
+  instructions: String[]
+}
 // [End of] Response body types
 
 
@@ -116,6 +121,60 @@ export default class RecipeController {
       .json({
         msg: 'SharedRecipe data collected successfuly!',
         sharedRecipesData
+      });
+  }
+
+  async getAllUserRecipes(req: Request, res: Response) {
+    const user_id: String = req.params.user_id;
+    // console.log(user_id);
+
+    // Selecting recipe data along with associated ingredient data
+    const { data: recipeData, error: selectRError } = await supabase
+      .from('Recipe')
+      .select(`id, title, instructions`)
+      .eq('user_id', user_id);
+
+    // console.log(recipeData);
+
+    if (!recipeData || recipeData.length === 0 || selectRError) {
+      const msg = "[RecipeController.getAllUserRecipes] Error selecting user data";
+      return res.status(500).json({ msg, userRecipesData: [] });
+    }
+
+    const ids = recipeData.map(r => r.id);
+    const { data: recipeIngredientData, error: selectRIError } = await supabase
+      .from('RecipeIngredient')
+      .select(`recipe_id, name, quantity, unit_measure`)
+      .in('recipe_id', ids);
+
+    if (!recipeIngredientData || recipeIngredientData.length === 0 || selectRIError) {
+      const msg = "[RecipeController.getAllUserRecipes] Error selecting RecipeIngredient data";
+      return res.status(500).json({ msg, userRecipesData: [] });
+    }
+
+    // Combine recipe and ingredient data
+    const combinedData = recipeData.map(recipe => {
+      const ingredients = recipeIngredientData.filter(ingredient => ingredient.recipe_id === recipe.id);
+      const trimIngredients = ingredients.map(i => {
+        return {
+          name: i.name,
+          quantity: i.quantity,
+          unit_measure: i.unit_measure
+        }
+      });
+      return {
+        title: recipe.title,
+        instructions: recipe.instructions,
+        ingredients: trimIngredients
+      };
+    });
+
+    // console.log(combinedData);
+
+    return res.status(200)
+      .json({
+        msg: 'All user recipes data collected successfuly!',
+        userRecipesData: combinedData
       });
   }
 

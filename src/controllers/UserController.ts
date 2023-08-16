@@ -69,6 +69,7 @@ export default class UserController {
         .json({ msg, id: NIL_UUID });
     }
 
+    // console.log("aqui, registrou novo user");
     return res.status(200)
       .json({ msg: 'New user created!', id });
   }
@@ -76,22 +77,31 @@ export default class UserController {
   async login(req: Request, res: Response) {
     const { email, password }: LoginUserReqBody = req.body;
 
+    // console.log(email)
+    // console.log(password);
+
     // Select existing user
     const { data: existing_user, error: selectError } = await supabase
       .from('User')
       .select(`*`)
       .eq('email', email)
       .eq('password', password);
+
+    // console.log(existing_user);
+    // console.log(selectError);
+
     if (selectError) {
       return res.status(500)
         .json({ msg: 'Error selecting existing user', id: NIL_UUID });
     }
 
     // Check for valid credentials
-    if (!existing_user) {
+    if (!existing_user || existing_user.length == 0) {
       return res.status(401)
         .json({ msg: 'Invalid Email or Password', id: NIL_UUID });
     }
+
+    // console.log("final, aqui, Login bem-sucedido");
 
     // Se chegou até aqui, significa que o login foi bem-sucedido
     return res.status(200)
