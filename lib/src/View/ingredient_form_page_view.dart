@@ -15,7 +15,7 @@ class _IngredientFormPageState extends State<IngredientFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(showBackButton: true),
       body: SingleChildScrollView(
         child: Column(
           children: [

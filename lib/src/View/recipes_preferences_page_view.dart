@@ -12,11 +12,9 @@ class RecipesPreferencesPage extends StatefulWidget {
 class _RecipesPreferencesPageState extends State<RecipesPreferencesPage> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: const CustomAppBar(),
-      body: const SingleChildScrollView(
-        
-      ),
+    return Scaffold(
+      appBar: const CustomAppBar(showBackButton: true),
+      body: const SingleChildScrollView(),
       bottomNavigationBar: BottomAppBar(
         height: 60,
         child: IconButton(

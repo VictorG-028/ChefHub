@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
+import '../components/custom_app_bar.dart';
 import '../model/shared_recipe_model.dart';
 import '../model/user_model.dart';
 
@@ -42,24 +43,7 @@ class _HomePageState extends State<HomePage> {
     final String userId = userProvider.id;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => {},
-          icon: const Icon(Icons.account_circle_outlined),
-          iconSize: AppBar().preferredSize.height - 16,
-        ),
-        actions: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              'lib/assets/ChefHubIcon.png',
-              width: AppBar().preferredSize.height - 16,
-              height: AppBar().preferredSize.height - 16,
-              fit: BoxFit.contain,
-            ),
-          ),
-        ],
-      ),
+      appBar: const CustomAppBar(showBackButton: false),
       body: ListView.builder(
         itemCount: sharedRecipes.length,
         itemBuilder: (context, index) {

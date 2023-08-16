@@ -14,7 +14,7 @@ class _CreatinRecipesPageState extends State<CreatinRecipesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(showBackButton: true),
       body: Column(
         children: [
           const Text('Suas Receitas'),
