@@ -1,4 +1,5 @@
 import 'package:chefhub/src/view/loading_screen_page_view.dart';
+import 'package:chefhub/src/view/recipe_details_page_view.dart';
 import 'package:chefhub/src/view/recipes_preferences_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:chefhub/src/view/login_page_view.dart';
@@ -25,11 +26,14 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
-            color: Color.fromARGB(255, 244, 123, 114),
+            color: Color.fromARGB(255, 236, 11, 67),
           ),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: Color.fromARGB(255, 244, 123, 114),
+            backgroundColor: Color.fromARGB(255, 236, 11, 67),
           ),
+          bottomAppBarTheme: const BottomAppBarTheme(
+            color: Color.fromARGB(255, 236, 11, 67),
+          ) 
         ),
         title: 'ChefHub',
         initialRoute: LoginPage.routeName,
@@ -43,6 +47,7 @@ class MyApp extends StatelessWidget {
           RecipesPreferencesPage.routeName: (context) =>
               const RecipesPreferencesPage(),
           LoadingPage.routeName: (context) => const LoadingPage(),
+          RecipeDetailsPage.routeName: (context) => const RecipeDetailsPage(),
         },
       ),
     );

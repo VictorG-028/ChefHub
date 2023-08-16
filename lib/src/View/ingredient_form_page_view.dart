@@ -16,29 +16,25 @@ class _IngredientFormPageState extends State<IngredientFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(showBackButton: true),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const CustomTextFormField(
-              fieldTitle: 'Nome do ingrediente',
-              label: 'Escreva o nome aqui',
-            ),
-            const CustomTextFormField(
-              fieldTitle: 'Quantidade',
-              label: 'Ex.: 1/2',
-            ),
-            const SizedBox(height: 10),
-            const UnitSelector(),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Salvar alterações'),
-            )
-          ],
+      body: const CustomTextFormField(
+        fieldTitle: 'Nome do ingrediente',
+        label: 'Escreva o nome aqui',
+      ),
+      floatingActionButton: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFEC0B43),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            fixedSize: const Size(200, 50)),
+        onPressed: (){
+          Navigator.pop(context);
+        },
+        child: const Text(
+          'Salvar Ingrediente',
+          style: TextStyle(fontSize: 16),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

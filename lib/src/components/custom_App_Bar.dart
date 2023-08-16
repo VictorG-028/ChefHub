@@ -17,26 +17,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: showBackButton
           ? IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back),
+              icon:  Icon(Icons.arrow_back, color: const Color(0xFFFFFFFF),size: AppBar().preferredSize.height - 16 ),
             )
           : IconButton(
-              onPressed: () {
-                // Handle user account icon action
-              },
-              icon: const Icon(Icons.account_circle_outlined),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              icon: const Icon(Icons.menu),
               iconSize: AppBar().preferredSize.height - 16,
             ),
-      actions: [
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset(
-            'lib/assets/ChefHubIcon.png',
-            width: AppBar().preferredSize.height - 16,
-            height: AppBar().preferredSize.height - 16,
-            fit: BoxFit.contain,
-          ),
+      centerTitle: true,
+      title: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset(
+          'lib/assets/ChefHubIcon.png',
+          width: AppBar().preferredSize.height - 16,
+          height: AppBar().preferredSize.height - 16,
+          fit: BoxFit.contain,
         ),
-      ],
+      ),
     );
   }
 }
