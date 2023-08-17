@@ -9,10 +9,17 @@ import 'package:chefhub/src/view/creating_recipes_page_view.dart';
 import 'package:chefhub/src/view/ingredients_page_view.dart';
 import 'package:chefhub/src/view/ingredient_form_page_view.dart';
 import 'package:provider/provider.dart';
+import 'src/model/ingredient_model.dart';
 import 'src/model/user_model.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => UserProvider()),
+      ChangeNotifierProvider(create: (context) => IngredientsProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,11 +27,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
           appBarTheme: const AppBarTheme(
             color: Color.fromARGB(255, 236, 11, 67),
           ),
@@ -33,23 +38,21 @@ class MyApp extends StatelessWidget {
           ),
           bottomAppBarTheme: const BottomAppBarTheme(
             color: Color.fromARGB(255, 236, 11, 67),
-          ) 
-        ),
-        title: 'ChefHub',
-        initialRoute: LoginPage.routeName,
-        routes: {
-          LoginPage.routeName: (context) => const LoginPage(),
-          RegisterPage.routeName: (context) => const RegisterPage(),
-          HomePage.routeName: (context) => const HomePage(),
-          CreatinRecipesPage.routeName: (context) => const CreatinRecipesPage(),
-          IngredientsPage.routeName: (context) => const IngredientsPage(),
-          IngredientFormPage.routeName: (context) => const IngredientFormPage(),
-          RecipesPreferencesPage.routeName: (context) =>
-              const RecipesPreferencesPage(),
-          LoadingPage.routeName: (context) => const LoadingPage(),
-          RecipeDetailsPage.routeName: (context) => const RecipeDetailsPage(),
-        },
-      ),
+          )),
+      title: 'ChefHub',
+      initialRoute: LoginPage.routeName,
+      routes: {
+        LoginPage.routeName: (context) => const LoginPage(),
+        RegisterPage.routeName: (context) => const RegisterPage(),
+        HomePage.routeName: (context) => const HomePage(),
+        CreatinRecipesPage.routeName: (context) => const CreatinRecipesPage(),
+        IngredientsPage.routeName: (context) => const IngredientsPage(),
+        IngredientFormPage.routeName: (context) => const IngredientFormPage(),
+        RecipesPreferencesPage.routeName: (context) =>
+            const RecipesPreferencesPage(),
+        LoadingPage.routeName: (context) => const LoadingPage(),
+        RecipeDetailsPage.routeName: (context) => const RecipeDetailsPage(),
+      },
     );
   }
 }

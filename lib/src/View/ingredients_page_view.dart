@@ -18,11 +18,27 @@ class IngredientsPage extends StatefulWidget {
 
 class _IngredientsPageState extends State<IngredientsPage> {
   List<Ingredient> userIngredients = [];
+  List<Ingredient> selectedToDeleteIngredients = [];
 
   @override
   void initState() {
     super.initState();
     _fetchUserIngredients();
+  }
+
+  void handleNextStep(BuildContext context) {
+    final ingredientsProvider =
+        Provider.of<IngredientsProvider>(context, listen: false);
+
+    // Filter selected ingredients and update the provider
+    final List<Ingredient> filteredIngredients =
+        userIngredients.where((ingredient) => ingredient.isSelected).toList();
+
+    ingredientsProvider.setIngredients(filteredIngredients);
+
+    // Navigate to the next step
+    Navigator.pushNamed(context, '/recipesPreferences')
+        .then((_) => _fetchUserIngredients());
   }
 
   Future<void> _fetchUserIngredients() async {
@@ -63,6 +79,9 @@ class _IngredientsPageState extends State<IngredientsPage> {
 
     if (response.statusCode == 200) {
       _fetchUserIngredients(); // Refresh the list of ingredients
+      setState(() {
+        selectedToDeleteIngredients.clear(); // Clear selected ingredients
+      });
     }
   }
 
@@ -93,8 +112,21 @@ class _IngredientsPageState extends State<IngredientsPage> {
                     Container(
                       alignment: Alignment.centerLeft,
                       height: 100,
-                      color: const Color(0xFFF9F3F3),
+                      color: ingredient.isSelected
+                          ? Color.fromARGB(
+                              255, 190, 244, 114) // Highlight if selected
+                          : Color.fromARGB(255, 213, 198, 181),
                       child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            ingredient.isSelected = !ingredient.isSelected;
+                            if (ingredient.isSelected) {
+                              selectedToDeleteIngredients.add(ingredient);
+                            } else {
+                              selectedToDeleteIngredients.remove(ingredient);
+                            }
+                          });
+                        },
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () => _deleteIngredients([ingredient]),
@@ -124,8 +156,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
             color: Color(0xFFF47A72),
           ),
           child: IconButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, '/recipesPreferences'),
+            onPressed: () => handleNextStep(context),
             icon: const Icon(Icons.arrow_forward,
                 color: Color(0xFFFFFFFF), size: 30),
           ),

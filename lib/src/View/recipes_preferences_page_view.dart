@@ -9,10 +9,27 @@ class RecipesPreferencesPage extends StatefulWidget {
   State<RecipesPreferencesPage> createState() => _RecipesPreferencesPageState();
 }
 
+const List<String> preferencesToPick = [
+  "Gosta de culinária Francesa",
+  "Gosta de culinária Italiana",
+  "Gosta de culinária Japonesa",
+  "Gosta de culinária Chinesa",
+  "Gosta de culinária Portuguesa",
+  "Não usar mais que quantidade",
+  "Pode acrescentar mais ingredientes",
+  "Receita deve ser vegana",
+  "Receita deve ser vegetariana",
+  "Receita deve ser simples",
+  "Receita deve ser fácil de fazer",
+];
+
 class _RecipesPreferencesPageState extends State<RecipesPreferencesPage> {
   static const double _separator = 20;
-  final List<bool> _selectedCulinary = List.generate(10, (index) => false);
+  final List<String> _preferencesToPick = preferencesToPick;
+  final List<bool> _selectedCulinary =
+      List.generate(preferencesToPick.length, (index) => false);
   final List<bool> _selectedRules = List.generate(2, (index) => false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,10 +102,11 @@ class _RecipesPreferencesPageState extends State<RecipesPreferencesPage> {
                 padding: const EdgeInsets.all(20),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 30,
-                      mainAxisSpacing: 30,
-                      mainAxisExtent: 60),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 30,
+                    mainAxisExtent: 60,
+                  ),
                   itemCount: _selectedRules.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
@@ -130,10 +148,12 @@ class _RecipesPreferencesPageState extends State<RecipesPreferencesPage> {
             color: Color(0xFFF47A72),
           ),
           child: IconButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, '/loadingPage'),
-            icon: const Icon(Icons.arrow_forward,
-                color: Color(0xFFFFFFFF), size: 30),
+            onPressed: () => Navigator.pushNamed(context, '/loadingPage'),
+            icon: const Icon(
+              Icons.arrow_forward,
+              color: Color(0xFFFFFFFF),
+              size: 30,
+            ),
           ),
         ),
       ),
