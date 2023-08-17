@@ -1,8 +1,10 @@
 import classes from "./RecipiesDetail.module.css";
 import img1 from "../../assets/canjiquinha.png";
 import Navbar from "../navbar/Navbar";
+import axios from "axios";
 
 const RecipiesDetail = () => {
+
   return (
     <>
       <Navbar />
@@ -84,3 +86,51 @@ const RecipiesDetail = () => {
 };
 
 export default RecipiesDetail;
+
+
+
+/*
+
+{
+ "msg": "New recipe created!",
+ "recipe_id": 6,
+ "title": "Macarrão doce com Leite",
+ "ingredients": [
+  {
+   "recipe_id": 6,
+   "name": "Açúcar",
+   "quantity": "50",
+   "unit_measure": "gramas"
+  },
+  {
+   "recipe_id": 6,
+   "name": "Leite",
+   "quantity": "2",
+   "unit_measure": "Litros"
+  },
+  {
+   "recipe_id": 6,
+   "name": "Macarrão Parafuso",
+   "quantity": "500",
+   "unit_measure": "gramas"
+  },
+  {
+   "recipe_id": 6,
+   "name": "Canela em pó",
+   "quantity": "a gosto",
+   "unit_measure": ""
+  }
+ ],
+ "instructions": [
+  "Em uma panela, adicione o leite e o açúcar e deixe ferver em fogo médio.",
+  "Adicione o macarrão parafuso e cozinhe até ficar al dente, mexendo de vez em quando.",
+  "Escorra o macarrão e reserve um pouco do leite.",
+  "Sirva o macarrão doce em pratos individuais, regue com um pouco do leite reservado e polvilhe canela em pó por cima.",
+  "Sirva quente e aproveite!"
+ ]
+}
+
+
+
+
+*/ 

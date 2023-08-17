@@ -1,25 +1,32 @@
 import { useState, useEffect } from "react";
+import api from "../../services/api";
 import Navbar from "../navbar/Navbar";
 import classes from "./Ingredients.module.css";
-import api from "../../services/api";
 
 const Ingredients = () => {
-  const getData = async () => {
-   await api.get("/get_shared_recipes")
-    .then((resp) => {
-      console.log(resp.data);
-    });
-  };
-
-  useEffect(() => {
-    void getData();
-  }, []);
-
-  const [ingredients, setIngredient] = useState([""]);
+  
+  const [ingredients, setIngredient] = useState("");
   console.log(ingredients);
-
+  
   const clearIngredients = () => {
-    setIngredient([""]);
+    setIngredient("");
+  };
+  
+  const ingredient = ingredients;
+
+  const data = {
+    ingredient
+  }
+  
+  console.log(data)
+
+  const handleSubmit = async () => {
+    await api.post('/create_recipe', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
   };
 
   return (
@@ -159,7 +166,7 @@ const Ingredients = () => {
           >
             Limpar selecionados
           </button>
-          <button type="button" className={classes.addIngredientButton}>
+          <button type="button" onClick={handleSubmit} className={classes.addIngredientButton}>
             Adicionar ingrediente
           </button>
           <button type="button" className={classes.nextButton}>
