@@ -38,6 +38,7 @@ routes.post('/login_user', userController.login);
 
 // ingredientController
 routes.get('/all_ingredients/:shouldGetUserId?', ingredientController.getAll);
+routes.get('/get_user_ingredients/:user_id?', ingredientController.getUserIngredients);
 routes.post('/create_ingredient', ingredientController.create);
 routes.post('/delete_ingredient', ingredientController.delete);
 routes.post('/consult_calories', ingredientController.consultCalorie);

@@ -43,11 +43,26 @@ export default class IngredientController {
       .select(selectColums);
 
     if (error) {
-      const msg = "[IngredientController] Error selecting all InventoryIngredient";
-      return res.status(500).json({ msg });
+      const msg = "[IngredientController.getAll] Error selecting all InventoryIngredient";
+      return res.status(500).json({ msg, allInvIngredients: [] });
     }
 
-    return res.status(200).json({ msg: "Successfully  returned all Invetory Ingredients", allInvIngredients });
+    return res.status(200).json({ msg: "Successfully  returned all Inventory Ingredients", allInvIngredients });
+  }
+
+  async getUserIngredients(req: Request, res: Response) {
+    const user_id: string = req.params.user_id;
+
+    const { data: userInvIngredients, error } = await supabase
+      .from('InventoryIngredient')
+      .select('name, quantity, unit_measure')
+      .eq('user_id', user_id);
+    if (error) {
+      const msg = "[IngredientController.getUserIngredients] Error selecting all InventoryIngredient";
+      return res.status(500).json({ msg, userInvIngredients: [] });
+    }
+
+    return res.status(200).json({ msg: "Successfully  returned all Inventory Ingredients", userInvIngredients });
   }
 
   async create(req: Request, res: Response) {
