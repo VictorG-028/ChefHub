@@ -76,10 +76,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _handleLogin(context) async {
+  void _handleLogin(BuildContext context) async {
     print("AQUI antes");
     await _loginUser(
         context, emailInputController.text, passwordInputController.text);
+
+    if (!context.mounted) return;
 
     print("AQUI meio");
     final userIdProvider = Provider.of<UserProvider>(context, listen: false);

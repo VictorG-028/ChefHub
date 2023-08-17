@@ -16,9 +16,8 @@ class UserRecipe {
     final List<Ingredient> parsedIngredients =
         ingredientsData.map((data) => Ingredient.fromJson(data)).toList();
 
-    final dynamic instructionsData = json['instructions'];
-    final List<String> parsedInstructions =
-        instructionsData is String ? instructionsData.split('@') : [];
+    final String instructionsData = json['instructions'];
+    final List<String> parsedInstructions = instructionsData.split('@');
 
     return UserRecipe(
       title: json['title'],

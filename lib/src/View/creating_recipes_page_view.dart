@@ -113,9 +113,9 @@ class _CreatinRecipesPageState extends State<CreatinRecipesPage> {
                           children: [
                             Text(recipe.title),
                             const SizedBox(height: 8.0),
-                            Text('Ingredients: ${recipe.ingredients.length}'),
+                            Text('Ingredientes: ${recipe.ingredients.length}'),
                             const SizedBox(height: 8.0),
-                            Text('Instructions: ${recipe.instructions.length}'),
+                            Text('Instruções: ${recipe.instructions.length}'),
                           ],
                         ),
                       ),

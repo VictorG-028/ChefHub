@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class UnitSelector extends StatefulWidget {
-  const UnitSelector({super.key});
+  final TextEditingController textController;
+
+  const UnitSelector({super.key, required this.textController});
   static const routName = '/teste';
 
   @override
-  State<UnitSelector> createState() => _UnitSelectorState();
+  State<UnitSelector> createState() => _UnitSelectorState(textController);
 }
 
 class _UnitSelectorState extends State<UnitSelector> {
+  final TextEditingController textController;
+
   List<String> units = [
     'kg',
     'mg',
@@ -23,8 +27,12 @@ class _UnitSelectorState extends State<UnitSelector> {
     'unit',
   ];
   int selectedIndex = 0;
+  String selecterdUnit = '';
+
+  _UnitSelectorState(this.textController);
 
   void _selectUnit(int index) {
+    textController.text = units[index];
     setState(() {
       selectedIndex = index;
     });
@@ -41,8 +49,7 @@ class _UnitSelectorState extends State<UnitSelector> {
       alignment: Alignment.center,
       children: [
         _buildSelector(circleRadius, itemSize, 0, unitDivider),
-        _buildSelector(
-            circleRadius * 0.6, itemSize, unitDivider, units.length),
+        _buildSelector(circleRadius * 0.6, itemSize, unitDivider, units.length),
       ],
     );
   }

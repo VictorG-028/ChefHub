@@ -16,4 +16,12 @@ class Ingredient {
       unitMeasure: json['unit_measure'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'quantity': quantity,
+      'unit_measure': unitMeasure,
+    };
+  }
 }
