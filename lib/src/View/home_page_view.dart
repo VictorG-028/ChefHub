@@ -1,3 +1,4 @@
+import 'package:chefhub/src/components/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<SharedRecipe> sharedRecipes = []; // List to hold the shared recipes
+  List<SharedRecipe> sharedRecipes = [];
 
   @override
   void initState() {
@@ -43,42 +44,56 @@ class _HomePageState extends State<HomePage> {
     final String userId = userProvider.id;
 
     return Scaffold(
+      drawer: CustomDrawer(),
       appBar: const CustomAppBar(showBackButton: false),
       body: ListView.builder(
-        itemCount: sharedRecipes.length,
-        itemBuilder: (context, index) {
-          final recipe = sharedRecipes[index];
-          return ListTile(
-            contentPadding: const EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 12.0),
-            leading: AspectRatio(
-              aspectRatio: 1.0,
-              child: Image.network(
-                recipe.image,
-                fit: BoxFit.cover,
-                width: 100,
-                height: 100,
+          itemCount: sharedRecipes.length,
+          itemBuilder: (context, index) {
+            final recipe = sharedRecipes[index];
+            return GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/recipeDetails'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 250,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.network(
+                          recipe.image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          Text(
+                            recipe.title,
+                            style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFEC0B43)),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(recipe.description),
+                          const SizedBox(height: 10),
+                          Text("Created by: ${recipe.createdBy}"),
+                        ]),
+                  ),
+                ],
               ),
-            ),
-            title: Text(recipe.title),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Created by: ${recipe.createdBy}",
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ), // Add some space between created_by and description
-                Text(recipe.description), // Display the description
-              ],
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/creatingRecipes'),
-        child: const Icon(Icons.restaurant_menu, size: 30),
-      ),
+            );
+          }),
     );
   }
 }

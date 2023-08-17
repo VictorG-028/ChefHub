@@ -100,6 +100,12 @@ class _IngredientFormPageState extends State<IngredientFormPage> {
             UnitSelector(textController: unitMeasureInputController),
             const SizedBox(height: 30),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFEC0B43),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  fixedSize: const Size(200, 50)),
               onPressed: () => {
                 _handleSaveButton(
                   context,
@@ -108,11 +114,15 @@ class _IngredientFormPageState extends State<IngredientFormPage> {
                   unitMeasureInputController.text,
                 )
               },
-              child: const Text('Salvar alterações'),
+              child: const Text(
+                'Salvar Ingrediente',
+                style: TextStyle(fontSize: 16),
+              ),
             )
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

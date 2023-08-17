@@ -20,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 123, 114),
+      backgroundColor: const Color.fromARGB(255, 236, 11, 67),
       body: Form(
         key: _formkey,
         child: SingleChildScrollView(
@@ -38,21 +38,26 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               CustomTextFormField(
                   fieldTitle: 'email',
+                  titleColor: const Color.fromARGB(255, 255, 255, 255),
                   label: 'email',
                   textController: emailInputController),
               CustomTextFormField(
                 fieldTitle: 'senha',
+                titleColor: const Color.fromARGB(255, 255, 255, 255),
                 label: 'senha',
                 textController: passwordInputController,
               ),
               const SizedBox(height: 50),
               ElevatedButton(
-                style: const ButtonStyle(
-                    textStyle:
-                        MaterialStatePropertyAll(TextStyle(fontSize: 16)),
-                    fixedSize: MaterialStatePropertyAll(Size(180, 40)),
-                    backgroundColor:
-                        MaterialStatePropertyAll(Color(0xff493C36))),
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  fixedSize: const Size(180, 40),
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                ),
                 onPressed: () => {
                   _registerUser(
                       emailInputController.text, passwordInputController.text)
@@ -61,12 +66,15 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 50),
               TextButton(
-                  onPressed: () => Navigator.popAndPushNamed(context, '/login'),
-                  child: const Text(
-                    'Já possui uma conta? ENTRAR',
-                    style: TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 113, 79, 79)),
-                  ))
+                onPressed: () => Navigator.popAndPushNamed(context, '/login'),
+                child: const Text(
+                  'Já possui uma conta? ENTRAR',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+              )
             ],
           ),
         ),

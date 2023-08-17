@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chefhub/src/components/custom_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:chefhub/src/components/custom_App_Bar.dart';
 import 'package:flutter/material.dart';
@@ -43,86 +44,97 @@ class _CreatinRecipesPageState extends State<CreatinRecipesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final sizeboxGrid = MediaQuery.sizeOf(context).width * 0.2;
     return Scaffold(
-      appBar: const CustomAppBar(showBackButton: true),
+      drawer: CustomDrawer(),
+      appBar: const CustomAppBar(showBackButton: false),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
-          const Text(
-            'Suas Receitas',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          const SizedBox(height: 30),
+          const Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              'Suas Receitas',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 0),
           Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-              ),
-              itemCount: userRecipes.length + 1, // Include the create button
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/ingredients');
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: DottedBorder(
-                        color: Colors.black,
-                        strokeWidth: 1,
-                        dashPattern: const <double>[
-                          6,
-                          3
-                        ], // Adjust dashed pattern
-                        padding: const EdgeInsets.all(2.0),
-                        borderPadding: const EdgeInsets.all(16.0),
-                        strokeCap: StrokeCap.butt,
-                        borderType: BorderType.RRect,
-                        radius: const Radius.circular(8.0),
-                        child: const SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: Center(
-                            child: Icon(Icons.add),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  crossAxisSpacing: 0.0,
+                  mainAxisSpacing: 0.0,
+                ),
+                itemCount: userRecipes.length + 1, // Include the create button
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return DottedBorder(
+                      color: Colors.black,
+                      strokeWidth: 1.2,
+                      dashPattern: const <double>[
+                        6,
+                        3
+                      ], // Adjust dashed pattern
+                      padding: const EdgeInsets.all(2.0),
+                      borderPadding: const EdgeInsets.all(128.0),
+                      strokeCap: StrokeCap.butt,
+                      borderType: BorderType.RRect,
+                      radius: const Radius.circular(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/ingredients');
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: sizeboxGrid,
+                            height: sizeboxGrid,
+                            child: const Center(
+                              child: Icon(Icons.add),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  final recipe = userRecipes[index - 1];
-                  return DottedBorder(
-                    color: Colors.black,
-                    strokeWidth: 2,
-                    dashPattern: const <double>[1, 0],
-                    padding: const EdgeInsets.all(0.0),
-                    borderPadding: const EdgeInsets.all(8.0),
-                    strokeCap: StrokeCap.butt,
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        // TODO: Handle recipe item tap
-                      },
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(recipe.title),
-                            const SizedBox(height: 8.0),
-                            Text('Ingredientes: ${recipe.ingredients.length}'),
-                            const SizedBox(height: 8.0),
-                            Text('Instruções: ${recipe.instructions.length}'),
-                          ],
+                    );
+                  } else {
+                    final recipe = userRecipes[index - 1];
+                    return DottedBorder(
+                      color: Colors.black,
+                      strokeWidth: 2,
+                      dashPattern: const <double>[1, 0],
+                      padding: const EdgeInsets.all(0.0),
+                      borderPadding:
+                          const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                      strokeCap: StrokeCap.butt,
+                      borderType: BorderType.RRect,
+                      radius: const Radius.circular(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          // TODO: Handle recipe item tap
+                        },
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(recipe.title),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                  'Ingredientes: ${recipe.ingredients.length}'),
+                              const SizedBox(height: 8.0),
+                              Text('Instruções: ${recipe.instructions.length}'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }
-              },
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ],

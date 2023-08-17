@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 123, 114),
+      backgroundColor: const Color.fromARGB(255, 236, 11, 67),
       body: Form(
         key: _formkey,
         // Link explicando SingleChildScrollView
@@ -42,33 +42,44 @@ class _LoginPageState extends State<LoginPage> {
               ),
               CustomTextFormField(
                   fieldTitle: 'email',
+                  titleColor: const Color.fromARGB(255, 255, 255, 255),
                   label: 'email',
                   textController: emailInputController),
               CustomTextFormField(
                   fieldTitle: 'senha',
+                  titleColor: const Color.fromARGB(255, 255, 255, 255),
                   label: 'senha',
                   textController: passwordInputController),
               const SizedBox(height: 50),
               ElevatedButton(
-                style: const ButtonStyle(
-                    textStyle:
-                        MaterialStatePropertyAll(TextStyle(fontSize: 16)),
-                    fixedSize: MaterialStatePropertyAll(Size(180, 40)),
-                    backgroundColor:
-                        MaterialStatePropertyAll(Color(0xff493C36))),
-                // onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  fixedSize: const Size(180, 40),
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                ),
+
+                //onPressed: () => Navigator.popAndPushNamed(context, '/home'),
                 onPressed: () => _handleLogin(context),
-                child: const Text('Entrar'),
+                child: const Text(
+                  'Entrar',
+                ),
               ),
               const SizedBox(height: 50),
               TextButton(
-                  onPressed: () =>
-                      Navigator.popAndPushNamed(context, '/register'),
-                  child: const Text(
-                    'Não possui uma conta? CRIAR CONTA',
-                    style: TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 113, 79, 79)),
-                  ))
+                onPressed: () =>
+                    Navigator.popAndPushNamed(context, '/register'),
+                child: const Text(
+                  'Não possui uma conta? CRIAR CONTA',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+              )
             ],
           ),
         ),
