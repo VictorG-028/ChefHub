@@ -1,32 +1,74 @@
 import { useState, useEffect } from "react";
-import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
+import backend from "../../services/backend";
 import Navbar from "../navbar/Navbar";
 import classes from "./Ingredients.module.css";
+import { useGlobalContext } from "../../providers";
 
 const Ingredients = () => {
-  
-  const [ingredients, setIngredient] = useState("");
+  const navigate = useNavigate();
+  const { userId } = useGlobalContext();
+  const [ingredients, setIngredients] = useState([]);
+  const { selectedIngredients, updateIngredients } = useGlobalContext();
   console.log(ingredients);
-  
-  const clearIngredients = () => {
-    setIngredient("");
-  };
-  
-  const ingredient = ingredients;
+  console.log(selectedIngredients);
 
-  const data = {
-    ingredient
-  }
-  
-  console.log(data)
+  const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [unitMeasure, setUnitMeasure] = useState("");
 
-  const handleSubmit = async () => {
-    await api.post('/create_recipe', {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+  // Fetch user ingredients data from the backend
+  const fetchIngredients = () => {
+    // console.log("userId-> " + userId);
+    backend.get(`/get_user_ingredients/${userId}`)
+      .then((response) => {
+        console.log(response);
+        setIngredients(response.data.userInvIngredients);
+      })
+      .catch((error) => {
+        console.error("Error fetching ingredients:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchIngredients()
+  }, [userId]);
+
+  const deleteIngredients = async () => {
+    const ingredientsToDelete = selectedIngredients.map((i) => {
+      const [name, quantity, unitMeasure] = i.split(",");
+      return {
+        name: name,
+        quantity: quantity,
+        unit_measure: unitMeasure,
+      }
+    });
+    await backend.post('/delete_ingredient', {
+      user_id: userId,
+      ingredients: ingredientsToDelete
+    });
+    updateIngredients([]);
+    fetchIngredients(); // Refresh ingredients
+  };
+
+  const openModal = () => {
+    setShowModal(true); // Open the modal
+  };
+
+  const closeModal = () => {
+    setShowModal(false); // Close the modal
+  };
+
+  const handleRequest = async () => {
+    await backend.post('/create_ingredient', {
+      user_id: userId,
+      name: name,
+      quantity: quantity,
+      unit_measure: unitMeasure,
+    });
+    setShowModal(false);
+    fetchIngredients(); // Refresh ingredients
   };
 
   return (
@@ -34,139 +76,36 @@ const Ingredients = () => {
       <Navbar />
       <h1 className={classes.title}>Escolha os ingredientes</h1>
       <section className={classes.ingredientsBody}>
-        <label className={classes.checkboxFilter}>
-          Ovo
-          <input
-            type="checkbox"
-            value="Ovo"
-            id="Ovo"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Farinha
-          <input
-            type="checkbox"
-            value="Farinha"
-            id="Farinha"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Tomate
-          <input
-            type="checkbox"
-            value="Tomate"
-            id="Tomate"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-
-        <label className={classes.checkboxFilter}>
-          Milho
-          <input
-            type="checkbox"
-            value="Milho"
-            id="Milho"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Frango
-          <input
-            type="checkbox"
-            value="Frango"
-            id="Frango"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Acelga
-          <input
-            type="checkbox"
-            value="Acelga"
-            id="Acelga"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Peixe
-          <input
-            type="checkbox"
-            value="Peixe"
-            id="Peixe"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Cebola
-          <input
-            type="checkbox"
-            value="Cebola"
-            id="Cebola"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Calabresa
-          <input
-            type="checkbox"
-            value="Calabresa"
-            id="Calabresa"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-
-        <label className={classes.checkboxFilter}>
-          Cenoura
-          <input
-            type="checkbox"
-            value="Cenoura"
-            id="Cenoura"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Espinafre
-          <input
-            type="checkbox"
-            value="Espinafre"
-            id="Espinafre"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
-        <label className={classes.checkboxFilter}>
-          Berinjela
-          <input
-            type="checkbox"
-            value="Berinjela"
-            id="Berinjela"
-            name="categoryfilter"
-            onChange={(e) => setIngredient(e.target.value)}
-          />
-        </label>
+        {ingredients.map((ingredient, index) => (
+          <label className={classes.checkboxFilter} key={index}>
+            {ingredient.name}{" | "}{ingredient.quantity}{ingredient.unit_measure}
+            <input
+              type="checkbox"
+              value={ingredient.name + "," + ingredient.quantity + "," + ingredient.unit_measure}
+              id={ingredient.name}
+              name="ingredientFilter"
+              onChange={(e) => {
+                const value = e.target.value;
+                updateIngredients((prevIngredients) =>
+                  e.target.checked
+                    ? [...prevIngredients, value]
+                    : prevIngredients.filter((ingredient) => ingredient !== value)
+                );
+              }}
+            />
+          </label>
+        ))}
       </section>
       <section className={classes.footer}>
         <div className={classes.ingredientsButtons}>
           <button
             type="reset"
             className={classes.deleteButton}
-            onClick={clearIngredients}
+            onClick={deleteIngredients}
           >
-            Limpar selecionados
+            Deletar selecionados
           </button>
-          <button type="button" onClick={handleSubmit} className={classes.addIngredientButton}>
+          <button type="button" onClick={openModal} className={classes.addIngredientButton}>
             Adicionar ingrediente
           </button>
           <button type="button" className={classes.nextButton}>
@@ -174,6 +113,35 @@ const Ingredients = () => {
           </button>
         </div>
       </section>
+
+      {/* Modal */}
+      {showModal && (
+        <div className={classes.modalOverlay}>
+          <div className={classes.modalContent}>
+            <h2>Adicionar Ingrediente</h2>
+            <input
+              type="text"
+              placeholder="Nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Quantidade"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Unidade de Medida"
+              value={unitMeasure}
+              onChange={(e) => setUnitMeasure(e.target.value)}
+            />
+            <button onClick={handleRequest}>Adicionar</button>
+            <button onClick={closeModal}>Cancelar</button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

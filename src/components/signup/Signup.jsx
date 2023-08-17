@@ -1,25 +1,45 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
-import api from "../../services/api";
+import backend from "../../services/backend";
+import { useGlobalContext } from "../../providers";
 
 import classes from "./Signup.module.css";
 import background from "../../assets/backgroundlogin.png";
 import background2 from "../../assets/backgroundlogin2.png";
 
 const Signup = () => {
-
-  const CreateUser = async () => {
-    await api.post("/register_user")
-    .then((resp) => {
-      console.log(resp.data);
-    });
-  };
-
+  const navigate = useNavigate();
+  const { updateUser } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   console.log(email);
   console.log(password);
+
+  const createUser = async () => {
+    try {
+      const response = await backend.post("/register_user", {
+        email: email,
+        password: password,
+      });
+
+      console.log(`${response}`);
+
+      // Check if id is valid
+      if (response.data.id === "00000000-0000-0000-0000-000000000000") {
+        console.log("Erro no servidor ou email/senha incorreta");
+        return;
+      }
+
+      updateUser(response.data.id);
+
+      // If the ID is not NIL, navigate to /home
+      navigate("/");
+    } catch (error) {
+      // Handle error here
+      console.error("Error during signup:", error);
+    }
+  };
 
   return (
     <>
@@ -45,8 +65,9 @@ const Signup = () => {
           />
         </form>
         <button
+          type="button"
           className={classes.signupButton}
-          onClick={CreateUser}
+          onClick={createUser}
         >
           Criar conta
         </button>
