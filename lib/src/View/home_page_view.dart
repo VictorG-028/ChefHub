@@ -7,6 +7,12 @@ import '../components/custom_app_bar.dart';
 import '../model/shared_recipe_model.dart';
 import '../model/user_model.dart';
 
+class ScreenArguments {
+  final int recipeId;
+
+  ScreenArguments(this.recipeId);
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static const routeName = '/home';
@@ -51,7 +57,8 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             final recipe = sharedRecipes[index];
             return GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/recipeDetails'),
+              onTap: () => Navigator.pushNamed(context, '/recipeDetails',
+                  arguments: {sharedRecipes[index].id}),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

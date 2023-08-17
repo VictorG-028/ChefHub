@@ -1,3 +1,4 @@
+import 'package:chefhub/src/View/home_page_view.dart';
 import 'package:chefhub/src/components/custom_App_Bar.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,9 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
   static const double _separator = 10;
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    int recipeId = args.recipeId;
+
     return Scaffold(
       appBar: const CustomAppBar(showBackButton: true),
       body: SingleChildScrollView(
@@ -39,7 +43,6 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     const SizedBox(height: _separator),
                     const Text(
                       'titulo da receita',
@@ -55,7 +58,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                     const SizedBox(height: _separator),
                     const Text("Created by: ana",
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: _separator*3),
+                    const SizedBox(height: _separator * 3),
                     const Text(
                       'Ingredientes',
                       style:
@@ -69,13 +72,13 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
-                            leading: const Icon(Icons.circle, size:10),
+                            leading: const Icon(Icons.circle, size: 10),
                             title: Text('Ingrediente $index'),
                           );
                         },
                       ),
                     ),
-                    const SizedBox(height: _separator*3),
+                    const SizedBox(height: _separator * 3),
                     const Text(
                       'Modo de preparo',
                       style:
@@ -89,7 +92,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
-                            leading: const Icon(Icons.circle, size:10),
+                            leading: const Icon(Icons.circle, size: 10),
                             title: Text('Modo de preparo $index'),
                           );
                         },
