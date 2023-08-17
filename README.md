@@ -80,7 +80,7 @@ Será necessário criar 3 contas novas :point_down:
 Figma: https://www.figma.com/file/O98HiGqkhaBn6RxM3F0ukH/Prot%C3%B3tipo?type=design&mode=design
 Trello: https://trello.com/b/wx34aFsO/chefhub
 Repositório do backend: https://github.com/VictorG-028/ChefHub-Backend
-Repositório do frontend web:
+Repositório do frontend web: https://github.com/carlosgabriel311/ChefHub_WEB/tree/master/src
 Repositório do frontend mobile: https://github.com/carlosgabriel311/ChefHub_MOBILE
 
 Links de aprendizado usados nesse projeto

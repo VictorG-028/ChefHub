@@ -38,12 +38,21 @@ interface SharedRecipeData {
   description: string;
   image: string;
 }
-interface SharedRecipeResBody extends SharedRecipeData { }
+interface SharedRecipesResBody extends SharedRecipeData { }
 
 interface RecipeResBody {
   title: string;
   ingredients: RecipeIngredient[];
   instructions: String[]
+}
+
+interface SharedRecipeResBody {
+  title: string;
+  ingredients: RecipeIngredient[];
+  instructions: string[];
+  created_by: string;
+  description: string;
+  image: string;
 }
 // [End of] Response body types
 
@@ -88,7 +97,7 @@ export default class RecipeController {
     // Selecting Recipes data
     const { data: recipesData, error: selectRError } = await supabase
       .from('Recipe')
-      .select(`title`)
+      .select(`title, id`)
       .in('id', allRecipeIds);
     if (!recipesData || selectRError) {
       // console.log(allSharedRecipes);
@@ -108,8 +117,9 @@ export default class RecipeController {
     }
 
     // zip as informações em um único array
-    const sharedRecipesData: SharedRecipeResBody[] = allSharedRecipes.map((sr, i) => {
+    const sharedRecipesData: SharedRecipesResBody[] = allSharedRecipes.map((sr, i) => {
       return {
+        id: recipesData[i].id,
         title: recipesData[i].title,
         created_by: usersData[i].email,
         description: sr.description,
@@ -133,12 +143,17 @@ export default class RecipeController {
       .from('Recipe')
       .select(`id, title, instructions`)
       .eq('user_id', user_id);
-
-    // console.log(recipeData);
-
-    if (!recipeData || recipeData.length === 0 || selectRError) {
+    if (selectRError) {
       const msg = "[RecipeController.getAllUserRecipes] Error selecting user data";
       return res.status(500).json({ msg, userRecipesData: [] });
+    }
+
+    if (recipeData.length == 0) {
+      return res.status(200)
+        .json({
+          msg: 'All user recipes data collected successfuly!',
+          userRecipesData: []
+        });
     }
 
     const ids = recipeData.map(r => r.id);
@@ -163,6 +178,7 @@ export default class RecipeController {
         }
       });
       return {
+        id: recipe.id,
         title: recipe.title,
         instructions: recipe.instructions,
         ingredients: trimIngredients
@@ -178,12 +194,79 @@ export default class RecipeController {
       });
   }
 
+  async getRecipe(req: Request, res: Response) {
+    const recipe_id: String = req.params.id;
+
+    // Selecting shared recipes
+    const { data: sharedRecipe, error: selectSRError } = await supabase
+      .from('SharedRecipe')
+      .select('*');
+    if (!sharedRecipe || sharedRecipe.length == 0 || selectSRError) {
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting shared recipes";
+      return res.status(500)
+        .json({ msg, sharedRecipesData: [] });
+    }
+
+    // Selecting Recipes data
+    const { data: recipeData, error: selectRError } = await supabase
+      .from('Recipe')
+      .select(`id, title, instructions`)
+      .eq('id', sharedRecipe[0].recipe_id);
+    if (!recipeData || selectRError) {
+      // console.log(allSharedRecipes);
+      console.log(selectRError);
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting recipe data";
+      return res.status(500).json({ msg, sharedRecipesData: [] });
+    }
+
+    // Selecting ingredients data
+    const { data: ingredientsData, error: selectRIrror } = await supabase
+      .from('RecipeIngredients')
+      .select(`name, quantity, unit_measure`)
+      .eq('recipe_id', recipeData[0].id);
+    if (!ingredientsData || selectRIrror) {
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting user data";
+      return res.status(500).json({ msg, sharedRecipesData: [] });
+    }
+
+    // Selecting users data
+    const { data: userData, error: selectUError } = await supabase
+      .from('User')
+      .select(`email`)
+      .eq('id', sharedRecipe[0].user_id);
+    if (!userData || selectUError) {
+      const msg = "[RecipeController.getAllSharedRecipes] Error selecting user data";
+      return res.status(500).json({ msg, sharedRecipesData: [] });
+    }
+
+    // zip as informações em um único array
+    const sharedRecipeData: SharedRecipeResBody = {
+      title: recipeData[0].title,
+      ingredients: ingredientsData as RecipeIngredient[],
+      instructions: recipeData[0].instructions.split('@'),
+      created_by: userData[0].email,
+      description: sharedRecipe[0].description,
+      image: sharedRecipe[0].img_link
+    };
+
+    return res.status(200)
+      .json({
+        msg: 'SharedRecipe data collected successfuly!',
+        sharedRecipeData
+      });
+  }
+
   async create(req: Request, res: Response) {
     const { user_id, ingredients, preferences }: CreateRecipeReqBody = req.body;
-
+    console.log(user_id);
+    console.log(ingredients);
+    console.log(preferences);
+    console.log("Criando receitas...");
     const temperature = 1;
     const messages = PromptCreator.createRecipePrompt(ingredients, preferences);
+    console.log("[1] criou prompt");
     const raw_response = await Consume_GPT_API.get_GPT_response(messages, temperature);
+    console.log("[2] criou receita");
     // console.log(raw_response)
     // console.log("<-----------------------------");
     // console.log(JSON5.stringify(raw_response))
@@ -245,6 +328,7 @@ export default class RecipeController {
         .json({ msg, id: -1 });
     }
 
+    console.log("[3] Organizou a receita e retornou para o front");
     return res.status(200).json({
       msg: 'New recipe created!',
       recipe_id,
