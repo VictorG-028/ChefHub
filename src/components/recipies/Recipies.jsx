@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import backend from "../../services/backend";
+import { useGlobalContext } from "../../providers";
 
 import classes from "./Recipies.module.css";
-import img1 from "../../assets/canjiquinha.png";
-import img2 from "../../assets/Creme-de-Fuba.png";
-import img3 from "../../assets/Caldo-grao-de-bico.png";
 
 const Recipies = () => {
+  const { updateRecipe } = useGlobalContext();
   const [sharedRecipes, setSharedRecipes] = useState([]);
 
   useEffect(() => {
@@ -28,6 +27,7 @@ const Recipies = () => {
         <Link
           key={index}
           to={"/recipies-detail"}
+          onClick={() => updateRecipe(recipe.id)}
           className={classes.recipeCard}
         >
           <div className={classes.recipeContainer}>

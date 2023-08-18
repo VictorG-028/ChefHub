@@ -6,7 +6,7 @@ import classes from "./UserRecipies.module.css";
 import { useGlobalContext } from "../../providers";
 
 const UserRecipies = () => {
-  const { userId } = useGlobalContext();
+  const { userId, updateRecipe } = useGlobalContext();
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
@@ -41,7 +41,10 @@ const UserRecipies = () => {
             <p>Modo de preparo</p>
             <p>{recipe.instructions}</p>
             {/* You can replace the following link with the appropriate route */}
-            <Link to={`/recipe-detail/${recipe.title}`}>Ler mais...</Link>
+            <Link
+              to={`/recipe-detail`}>Ler mais...
+              onClick={() => updateRecipe(recipe.id)}
+            </Link>
           </div>
         ))}
       </section>
