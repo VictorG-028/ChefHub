@@ -46,13 +46,13 @@ interface RecipeResBody {
   instructions: String[]
 }
 
-interface SharedRecipeResBody {
+interface RecipeDataResBody {
   title: string;
   ingredients: RecipeIngredient[];
   instructions: string[];
   created_by: string;
-  description: string;
-  image: string;
+  description?: string;
+  image?: string;
 }
 // [End of] Response body types
 
@@ -197,12 +197,13 @@ export default class RecipeController {
   async getRecipe(req: Request, res: Response) {
     const recipe_id: String = req.params.id;
 
-    // Selecting shared recipes
+    // Selecting shared recipes (if its shared)
     const { data: sharedRecipe, error: selectSRError } = await supabase
       .from('SharedRecipe')
-      .select('*');
-    if (!sharedRecipe || sharedRecipe.length == 0 || selectSRError) {
-      const msg = "[RecipeController.getAllSharedRecipes] Error selecting shared recipes";
+      .select('description, img_link')
+      .eq('recipe_id', recipe_id);
+    if (selectSRError) {
+      const msg = "[RecipeController.getRecipe] Error selecting shared recipes";
       return res.status(500)
         .json({ msg, sharedRecipesData: [] });
     }
@@ -210,22 +211,22 @@ export default class RecipeController {
     // Selecting Recipes data
     const { data: recipeData, error: selectRError } = await supabase
       .from('Recipe')
-      .select(`id, title, instructions`)
-      .eq('id', sharedRecipe[0].recipe_id);
-    if (!recipeData || selectRError) {
+      .select(`id, user_id, title, instructions`)
+      .eq('id', recipe_id);
+    if (!recipeData || !recipeData[0] || selectRError) {
       // console.log(allSharedRecipes);
       console.log(selectRError);
-      const msg = "[RecipeController.getAllSharedRecipes] Error selecting recipe data";
+      const msg = "[RecipeController.getRecipe] Error selecting recipe data";
       return res.status(500).json({ msg, sharedRecipesData: [] });
     }
 
     // Selecting ingredients data
     const { data: ingredientsData, error: selectRIrror } = await supabase
-      .from('RecipeIngredients')
+      .from('RecipeIngredient')
       .select(`name, quantity, unit_measure`)
       .eq('recipe_id', recipeData[0].id);
-    if (!ingredientsData || selectRIrror) {
-      const msg = "[RecipeController.getAllSharedRecipes] Error selecting user data";
+    if (!ingredientsData || !ingredientsData[0] || selectRIrror) {
+      const msg = "[RecipeController.getRecipe] Error selecting recipe ingredients";
       return res.status(500).json({ msg, sharedRecipesData: [] });
     }
 
@@ -233,26 +234,26 @@ export default class RecipeController {
     const { data: userData, error: selectUError } = await supabase
       .from('User')
       .select(`email`)
-      .eq('id', sharedRecipe[0].user_id);
+      .eq('id', recipeData[0].user_id);
     if (!userData || selectUError) {
-      const msg = "[RecipeController.getAllSharedRecipes] Error selecting user data";
+      const msg = "[RecipeController.getRecipe] Error selecting user data";
       return res.status(500).json({ msg, sharedRecipesData: [] });
     }
 
     // zip as informações em um único array
-    const sharedRecipeData: SharedRecipeResBody = {
+    const compactedRecipeData: RecipeDataResBody = {
       title: recipeData[0].title,
       ingredients: ingredientsData as RecipeIngredient[],
       instructions: recipeData[0].instructions.split('@'),
       created_by: userData[0].email,
-      description: sharedRecipe[0].description,
-      image: sharedRecipe[0].img_link
+      description: sharedRecipe[0] ? sharedRecipe[0].description : "",
+      image: sharedRecipe[0] ? sharedRecipe[0].img_link : "NULL"
     };
 
     return res.status(200)
       .json({
-        msg: 'SharedRecipe data collected successfuly!',
-        sharedRecipeData
+        msg: 'Recipe data collected successfuly!',
+        compactedRecipeData
       });
   }
 
