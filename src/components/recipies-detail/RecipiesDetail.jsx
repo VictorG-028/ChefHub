@@ -25,7 +25,9 @@ const RecipiesDetail = () => {
       <Navbar />
       <div className={classes.recipeContainer}>
         <h1>{recipe.title}</h1>
-        <img src={recipe.image} alt={recipe.title} />
+        {recipe.image !== "NULL" && (
+          <img src={recipe.image} alt={recipe.title} />
+        )}
         <span className={classes.recipeText}>
           <p>{recipe.description}</p>
           <em>

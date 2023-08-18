@@ -39,18 +39,26 @@ const UserRecipies = () => {
               ))}
             </ul>
             <p>Modo de preparo</p>
-            <p>{recipe.instructions}</p>
+            <p>{
+              recipe.instructions
+                .split("@")
+                .slice(0, 2)
+                .map((step, index) => (
+                  <span key={index}>{step}<br /></span>
+                ))
+            }</p>
             {/* You can replace the following link with the appropriate route */}
             <Link
-              to={`/recipe-detail`}>Ler mais...
+              to={`/recipe-detail`}
               onClick={() => updateRecipe(recipe.id)}
+            >
+              Ler mais...
             </Link>
           </div>
         ))}
       </section>
     </>
   );
-
 };
 
 export default UserRecipies;

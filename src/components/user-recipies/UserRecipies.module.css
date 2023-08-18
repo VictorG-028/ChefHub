@@ -14,7 +14,8 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  margin-left: 2rem;
+  margin-left: 2.2rem;
+  margin-bottom: 2.2rem;
   padding: 1rem;
   border-radius: 1rem;
   width: 30%;
@@ -22,6 +23,6 @@
 }
 
 .userRecipiesCard a {
-    color: var(--color-principal-2);
-    font-weight: 700;
+  color: var(--color-principal-2);
+  font-weight: 700;
 }
