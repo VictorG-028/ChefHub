@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import backend from "../../services/backend";
-import classes from "./UserRecipies.module.css";
+import classes from "./UserRecipes.module.css";
 import { useGlobalContext } from "../../providers";
 
-const UserRecipies = () => {
+const UserRecipes = () => {
   const { userId, updateRecipe } = useGlobalContext();
   const [recipes, setRecipes] = useState([]);
 
@@ -26,9 +26,9 @@ const UserRecipies = () => {
     <>
       <Navbar />
       <h1 className={classes.title}>Suas receitas</h1>
-      <section className={classes.userRecipiesBody}>
+      <section className={classes.userRecipeBody}>
         {recipes.map((recipe, index) => (
-          <div key={index} className={classes.userRecipiesCard}>
+          <div key={index} className={classes.userRecipeCard}>
             <h2>{recipe.title}</h2>
             <p>Ingredientes</p>
             <ul>
@@ -61,4 +61,4 @@ const UserRecipies = () => {
   );
 };
 
-export default UserRecipies;
+export default UserRecipes;

@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RecipiesDetail from "./components/recipies-detail/RecipiesDetail";
+import RecipeDetail from "./components/recipe-detail/RecipeDetail";
 import { GlobalProvider } from "./providers";
 
 import Home from "./components/home/Home";
-import UserRecipies from "./components/user-recipies/UserRecipies";
+import UserRecipes from "./components/user-recipes/UserRecipes";
 import Ingredients from "./components/ingredients/Ingredients";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
@@ -20,12 +20,12 @@ const Homepage = () => {
   return <Home />;
 };
 
-const RecipiesDetailPage = () => {
-  return <RecipiesDetail />;
+const RecipeDetailPage = () => {
+  return <RecipeDetail />;
 };
 
-const UserRecipiesPage = () => {
-  return <UserRecipies />
+const UserRecipesPage = () => {
+  return <UserRecipes />
 }
 
 const IngredientsPage = () => {
@@ -38,8 +38,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/recipies-detail" element={<RecipiesDetailPage />} />
-          <Route path="/user-recipies" element={<UserRecipiesPage />} />
+          <Route path="/recipe-detail" element={<RecipeDetailPage />} />
+          <Route path="/user-recipes" element={<UserRecipesPage />} />
           <Route path="/ingredients" element={<IngredientsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />

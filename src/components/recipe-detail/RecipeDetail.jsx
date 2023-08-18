@@ -1,10 +1,10 @@
-import classes from "./RecipiesDetail.module.css";
+import classes from "./RecipeDetail.module.css";
 import { useState, useEffect } from "react";
 import backend from "../../services/backend";
 import Navbar from "../navbar/Navbar";
 import { useGlobalContext } from "../../providers";
 
-const RecipiesDetail = () => {
+const RecipeDetail = () => {
   const { recipeId } = useGlobalContext();
   const [recipe, setRecipe] = useState({});
 
@@ -58,7 +58,7 @@ const RecipiesDetail = () => {
   );
 };
 
-export default RecipiesDetail;
+export default RecipeDetail;
 
 
 

@@ -1,11 +1,11 @@
 import Navbar from "../navbar/Navbar";
-import Recipies from "../recipies/Recipies";
+import SharedRecipes from "../shared-recipes/SharedRecipes";
 
 const Home = () => {
   return (
     <>
       <Navbar />
-      <Recipies />
+      <SharedRecipes />
     </>
   );
 };

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import backend from "../../services/backend";
 import { useGlobalContext } from "../../providers";
 
-import classes from "./Recipies.module.css";
+import classes from "./SharedRecipes.module.css";
 
-const Recipies = () => {
+const SharedRecipes = () => {
   const { updateRecipe } = useGlobalContext();
   const [sharedRecipes, setSharedRecipes] = useState([]);
 
@@ -26,7 +26,7 @@ const Recipies = () => {
       {sharedRecipes.map((recipe, index) => (
         <Link
           key={index}
-          to={"/recipies-detail"}
+          to={"/recipe-detail"}
           onClick={() => updateRecipe(recipe.id)}
           className={classes.recipeCard}
         >
@@ -48,4 +48,4 @@ const Recipies = () => {
   );
 };
 
-export default Recipies;
+export default SharedRecipes;
