@@ -21,7 +21,7 @@ void main() {
 
     // Simula a entrada de texto nos campos de email e senha
     await tester.enterText(find.byKey(const Key('email_field')), 'seu_emailexample');
-    await tester.enterText(find.byKey(Key('password_field')), 'sua_senha_secreta');
+    await tester.enterText(find.byKey(const Key('password_field')), 'sua_senha_secreta');
 
     // simula um toque no botão de login
     await tester.tap(find.byKey(const Key('login_button')));
