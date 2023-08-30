@@ -28,8 +28,7 @@ class CustomTextFormField extends StatelessWidget {
         children: [
           Text(
             fieldTitle,
-            style: TextStyle(
-                color: titleColor, fontSize: 18),
+            style: TextStyle(color: titleColor, fontSize: 18),
           ),
           const SizedBox(height: 5),
           TextFormField(
@@ -37,6 +36,9 @@ class CustomTextFormField extends StatelessWidget {
             obscureText: isObscure,
             validator: validator,
             decoration: InputDecoration(
+              errorStyle: const TextStyle(
+                color: Colors.black 
+              ),
               filled: true,
               fillColor: Colors.white,
               enabledBorder: const OutlineInputBorder(

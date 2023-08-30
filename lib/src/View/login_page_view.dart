@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../model/user_model.dart';
+import 'package:email_validator/email_validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,7 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final GlobalKey _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final emailInputController = TextEditingController();
   final passwordInputController = TextEditingController();
   String _userId = "0";
@@ -42,16 +43,26 @@ class _LoginPageState extends State<LoginPage> {
               ),
               CustomTextFormField(
                   fieldTitle: 'email',
+                  key: const Key('email_field'),
                   titleColor: const Color.fromARGB(255, 255, 255, 255),
                   label: 'email',
-                  textController: emailInputController),
+                  textController: emailInputController,
+                  validator: (value) {
+                    if (!EmailValidator.validate(value!)) {
+                      return 'Email inválido';
+                    }
+                    return null;
+                  }),
               CustomTextFormField(
+                  key: const Key('password_field'),
+                  isObscure: true,
                   fieldTitle: 'senha',
                   titleColor: const Color.fromARGB(255, 255, 255, 255),
                   label: 'senha',
                   textController: passwordInputController),
               const SizedBox(height: 50),
               ElevatedButton(
+                key: const Key('login_button'),
                 style: ElevatedButton.styleFrom(
                   textStyle: const TextStyle(
                     fontSize: 18,
@@ -61,9 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   foregroundColor: const Color.fromARGB(255, 0, 0, 0),
                 ),
-
-                //onPressed: () => Navigator.popAndPushNamed(context, '/home'),
-                onPressed: () => _handleLogin(context),
+                onPressed: () {
+                  if (_formkey.currentState!.validate()) {
+                    _handleLogin(context);
+                  }
+                },
                 child: const Text(
                   'Entrar',
                 ),
@@ -88,18 +101,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleLogin(BuildContext context) async {
-    print("AQUI antes");
     await _loginUser(
         context, emailInputController.text, passwordInputController.text);
 
     if (!context.mounted) return;
 
-    print("AQUI meio");
     final userIdProvider = Provider.of<UserProvider>(context, listen: false);
     userIdProvider.setUserId(_userId);
 
     if (_userId != "0") {
-      print("AQUI depois");
       Navigator.popAndPushNamed(context, '/home');
     }
   }
@@ -122,10 +132,6 @@ class _LoginPageState extends State<LoginPage> {
 
     final msg = response["msg"].toString();
     final userId = response["id"].toString();
-    print("=--------------=");
-    print(response);
-    print(msg);
-    print("=--------------=");
 
     if (rawResponse.statusCode == 200) {
       setState(() {
