@@ -37,7 +37,6 @@ class _LoadingPageState extends State<LoadingPage>
   @override
   Widget build(BuildContext context) {
     requestToCreateRecipe(context); // <--------------
-    loadCreatedRecipesPage(context);
     return Container(
       color: const Color(0xFFFFFFFF),
       child: Column(

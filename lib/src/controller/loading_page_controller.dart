@@ -6,12 +6,18 @@ import 'dart:convert';
 
 import '../model/user_model.dart';
 
-Future<void> loadCreatedRecipesPage(BuildContext context) async {
-  await Future.delayed(const Duration(seconds: 5));
-  // ignore: use_build_context_synchronously
+void loadCreatedRecipesPage(BuildContext context) {
   Navigator.pushNamedAndRemoveUntil(
     context,
     '/creatingRecipes',
+    (Route<dynamic> route) => false,
+  );
+}
+
+void loadIngredientesPage(BuildContext context) {
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    '/ingredients',
     (Route<dynamic> route) => false,
   );
 }
@@ -59,8 +65,14 @@ Future<void> requestToCreateRecipe(BuildContext context) async {
     print("Title: $title");
     print("Ingredients: $recipeIngredients");
     print("Instructions: $instructions");
+
+    //go to the created recipe page
+    loadCreatedRecipesPage(context);
   } else {
     // Handle error
     print("Failed to create recipe");
+
+    //go back to creation page
+    loadIngredientesPage(context);
   }
 }
