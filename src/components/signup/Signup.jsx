@@ -33,7 +33,7 @@ const Signup = () => {
       updateUser(response.data.id);
 
       // If the ID is not NIL, navigate to /home
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       // Handle error here
       console.error("Error during signup:", error);
@@ -43,7 +43,7 @@ const Signup = () => {
   return (
     <>
       <div className={classes.navbar}>
-        <Link to={"/"}>
+        <Link to={"/home"}>
           <span className={classes.logo}>
             <img src={logo} />
             <h1 className={classes.titleLogo}>ChefHub</h1>

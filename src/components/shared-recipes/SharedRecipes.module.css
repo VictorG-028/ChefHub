@@ -61,12 +61,25 @@
   overflow: hidden;
   /* Adiciona os três pontos de elipse */
   text-overflow: ellipsis;
-  /* Limitar a altura máxima do texto */
-  /* Ajuste conforme necessário */
+
+  position: relative;
+
+  /* Adicionar espaço superior. Ajuste conforme necessário */
   max-height: 6rem;
-  /* Adicionar espaço inferior */
+
+  /* Adicionar espaço inferior. Ajuste conforme necessário */
   margin-bottom: 1rem;
 }
+
+/* 
+.recipeText p::after {
+  content: "...";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%);
+} 
+*/
 
 @media only screen and (max-width: 425px) {
   .recipeContainer {

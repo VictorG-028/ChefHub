@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import backend from "../../services/backend";
 import Navbar from "../navbar/Navbar";
 import classes from "./Ingredients.module.css";
@@ -10,6 +10,7 @@ const Ingredients = () => {
   const { userId } = useGlobalContext();
   const [ingredients, setIngredients] = useState([]);
   const { selectedIngredients, updateIngredients } = useGlobalContext();
+  const checkboxRefs = useRef([]);
   console.log(ingredients);
   console.log(selectedIngredients);
 
@@ -52,12 +53,12 @@ const Ingredients = () => {
     fetchIngredients(); // Refresh ingredients
   };
 
-  const clearIngredients = () => {
-    for (let i = 0; i < ingredients.length; i++) {
-      ingredients[i].checked = false;
-    }
-    setIngredients([]);
-    updateIngredients([]);
+  const uncheckAllIngredients = () => {
+    checkboxRefs.current.forEach((checkbox) => {
+      if (checkbox) {
+        checkbox.checked = false;
+      }
+    });
   };
 
   const openModal = () => {
@@ -86,14 +87,17 @@ const Ingredients = () => {
       <section className={classes.ingredientsBody}>
         {ingredients.map((ingredient, index) => (
           <label className={classes.checkboxFilter} key={index}>
-            {ingredient.name}{" | "}{ingredient.quantity}{ingredient.unit_measure}
+            {ingredient.name}{" "}{ingredient.quantity}{" "}{ingredient.unit_measure}{" "}
             <input
+              ref={(element) => (checkboxRefs.current[index] = element)}
               type="checkbox"
               value={ingredient.name + "," + ingredient.quantity + "," + ingredient.unit_measure}
               id={ingredient.name}
               name="ingredientFilter"
               onChange={(e) => {
                 const value = e.target.value;
+                console.log("Checkbox checked log:", e.target.checked);
+
                 updateIngredients((prevIngredients) =>
                   e.target.checked
                     ? [...prevIngredients, value]
@@ -116,8 +120,10 @@ const Ingredients = () => {
           <button
             type="reset"
             className={classes.cleanSelectionButton}
-            onClick={clearIngredients}
-          >
+            onClick={() => {
+              updateIngredients([]); // Clear the selectedIngredients array
+              uncheckAllIngredients(); // Reset the checked values of checkboxes
+            }}>
             Limpar selecionados
           </button>
           <button

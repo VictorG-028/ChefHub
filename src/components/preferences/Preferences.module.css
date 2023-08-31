@@ -51,8 +51,22 @@
   background-color: var(--color-detail-3);
 }
 
-.nextButton {
+/* .nextButton {
   background-color: var(--color-detail-2);
+} */
+.nextButton {
+  display: inline-block;
+  background-color: var(--color-detail-2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.nextButton:hover {
+  background-color: var(--color-detail-3);
+  transform: scale(1.05);
 }
 
 .addPrefInput {

@@ -35,7 +35,7 @@ const Login = () => {
       updateUser(response.data.id);
 
       // If the ID is not NIL, navigate to /home
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       // Handle error here
       console.error("Error during login:", error);
@@ -45,7 +45,7 @@ const Login = () => {
   return (
     <>
       <div className={classes.navbar}>
-        <Link to={"/"}>
+        <Link to={"/home"}>
           <span className={classes.logo}>
             <img src={logo} />
             <h1 className={classes.titleLogo}>ChefHub</h1>
