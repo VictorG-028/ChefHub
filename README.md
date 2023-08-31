@@ -16,20 +16,21 @@ O ChefHub é uma aplicação mobile desenvolvida em Flutter que tem como objetiv
 
 1. **Instalação**:
    Certifique-se de ter o ambiente de desenvolvimento Flutter configurado em sua máquina. Clone este repositório e execute os comandos necessários para instalar as dependências.
+   Caso não tenha o flutter instalado Clique no link https://docs.flutter.dev/get-started/install e siga o passo-a-passo
 
-2. **Execução**:
+3. **Execução**:
    Utilize um emulador ou dispositivo físico para executar o aplicativo. Execute `flutter run` no terminal na pasta raiz do projeto.
 
-3. **Selecionar Ingredientes**:
+4. **Selecionar Ingredientes**:
    Na tela de geração de receita,clique em adicionar ingredientes e vá adicionando cada ingrediente que deseja.
 
-4. **Definir Quantidades**:
+5. **Definir Quantidades**:
    Especifique as quantidades de cada ingrediente escolhido.
 
-5. **Gerar Receita**:
+6. **Gerar Receita**:
    Após selecionar ingredientes e quantidades, clique na seta apontando para direita na barra de baixo para seguir para proxima etapa. 
 
-6. **Personalizar**:
+7. **Personalizar**:
   Personalize as regras de geração da receita e selecione de qual culinaria você gostaria de obter a receita.
 
 8.  **Visualizar**:
@@ -45,7 +46,8 @@ O ChefHub é uma aplicação mobile desenvolvida em Flutter que tem como objetiv
 - Paulo Vinicius
 - Fabio Hatem
 - João Victor
-
+## Testes
+- Teste de inserção de email inválido no Login: na linha de comando se certifique de estar no diretorio raiz e rode o comando "flutter test test_email_invalido.dart"
 ## Licença
 
 Este projeto está sob a Licença [MIT](https://github.com/carlosgabriel311/ChefHub_MOBILE/blob/main/LICENSE).
