@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  justify-content: space-evenly;
 }
 
 .title {
@@ -14,8 +15,6 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  margin-left: 2.2rem;
-  margin-bottom: 2.2rem;
   padding: 1rem;
   border-radius: 1rem;
   width: 30%;
@@ -25,4 +24,28 @@
 .userRecipeCard a {
   color: var(--color-principal-2);
   font-weight: 700;
+}
+
+@media only screen and (max-width: 768px) {
+  .userRecipeCard {
+    width: 40%;
+    margin: 0;
+  }
+
+  .userRecipeBody {
+    justify-content: space-around;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .userRecipeBody {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userRecipeCard {
+    width: 80%;
+    margin-bottom: 1rem;
+    margin-left: 0;
+  }
 }

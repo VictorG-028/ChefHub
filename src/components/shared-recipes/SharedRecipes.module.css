@@ -6,10 +6,49 @@
 
 .recipeCard {
   color: var(--color-default);
+  /* Add this to make the whole card flex container */
+  display: flex;
+  /* Make both sides of the card equal in height */
+  align-items: stretch;
+  /* Remove underline from links */
+  text-decoration: none;
+}
+
+.recipeContainer {
+  display: flex;
+  padding: 0 4rem 2rem 4rem;
+  /* Alinhar no topo para evitar altura excessiva */
+  align-items: flex-start;
+}
+
+.recipeContainer img {
+  width: 20rem;
+  height: 12rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.recipeText {
+  display: flex;
+  padding-left: 1rem;
+  flex-direction: column;
+  flex: 1;
+
+  /* Definir altura máxima para evitar overflow vertical */
+  /* Ajuste conforme necessário */
+  max-height: 12rem;
+
+  /* Habilitar overflow apenas na vertical */
+  overflow-y: auto;
 }
 
 .recipeDescription {
   font-weight: 400;
+}
+
+.recipeText h2 {
+  margin: 0;
+  color: var(--color-principal-2-shade-2);
 }
 
 .recipeText h2:hover {
@@ -17,20 +56,39 @@
   transition: 400ms;
 }
 
-.recipeContainer {
-  display: flex;
-  padding: 0 4rem 2rem 4rem;
-  align-items: center;
+.recipeText p {
+  /* Esconde o conteúdo excedente */
+  overflow: hidden;
+  /* Adiciona os três pontos de elipse */
+  text-overflow: ellipsis;
+  /* Limitar a altura máxima do texto */
+  /* Ajuste conforme necessário */
+  max-height: 6rem;
+  /* Adicionar espaço inferior */
+  margin-bottom: 1rem;
 }
 
-.recipeContainer img {
-  width: 20rem;
-  height: 12rem;
-  object-fit: cover;
-}
+@media only screen and (max-width: 425px) {
+  .recipeContainer {
+    flex-direction: column;
+    padding: 1rem;
+  }
 
-.recipeText {
-  display: flex;
-  margin-left: 1rem;
-  flex-direction: column;
+  .recipeText {
+    align-items: center;
+    text-align: center;
+  }
+
+  .recipeText h2,
+  p {
+    margin: 0.5rem;
+  }
+
+  .recipeText p {
+    font-size: 14px;
+
+    /* Ajuste conforme necessário */
+    max-height: 5rem;
+    margin-bottom: 1rem;
+  }
 }

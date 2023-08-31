@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../navbar/Navbar";
 import backend from "../../services/backend";
 import { useGlobalContext } from "../../providers";
 
@@ -13,8 +12,8 @@ const Signup = () => {
   const { updateUser } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(email);
-  console.log(password);
+  // console.log(email);
+  // console.log(password);
 
   const createUser = async () => {
     try {
@@ -43,7 +42,14 @@ const Signup = () => {
 
   return (
     <>
-      <Navbar />
+      <div className={classes.navbar}>
+        <Link to={"/"}>
+          <span className={classes.logo}>
+            <img src={logo} />
+            <h1 className={classes.titleLogo}>ChefHub</h1>
+          </span>
+        </Link>
+      </div>
       <h1 className={classes.title}>Criar conta</h1>
       <div className={classes.signupBody}>
         <form className={classes.formContainer}>

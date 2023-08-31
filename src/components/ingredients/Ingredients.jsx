@@ -52,6 +52,14 @@ const Ingredients = () => {
     fetchIngredients(); // Refresh ingredients
   };
 
+  const clearIngredients = () => {
+    for (let i = 0; i < ingredients.length; i++) {
+      ingredients[i].checked = false;
+    }
+    setIngredients([]);
+    updateIngredients([]);
+  };
+
   const openModal = () => {
     setShowModal(true); // Open the modal
   };
@@ -99,18 +107,29 @@ const Ingredients = () => {
       <section className={classes.footer}>
         <div className={classes.ingredientsButtons}>
           <button
-            type="reset"
+            type="button"
             className={classes.deleteButton}
             onClick={deleteIngredients}
           >
             Deletar selecionados
           </button>
-          <button type="button" onClick={openModal} className={classes.addIngredientButton}>
+          <button
+            type="reset"
+            className={classes.cleanSelectionButton}
+            onClick={clearIngredients}
+          >
+            Limpar selecionados
+          </button>
+          <button
+            type="button"
+            onClick={openModal} // mexe aqui
+            className={classes.addIngredientButton}
+          >
             Adicionar ingrediente
           </button>
-          <button type="button" className={classes.nextButton}>
+          <Link to={"/preferences"} className={classes.nextButton}>
             Próxima etapa
-          </button>
+          </Link>
         </div>
       </section>
 

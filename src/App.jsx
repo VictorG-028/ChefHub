@@ -7,6 +7,7 @@ import UserRecipes from "./components/user-recipes/UserRecipes";
 import Ingredients from "./components/ingredients/Ingredients";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
+import Preferences from "./components/preferences/Preferences";
 
 const LoginPage = () => {
   return <Login />
@@ -32,6 +33,10 @@ const IngredientsPage = () => {
   return <Ingredients />
 }
 
+const PreferencesPage = () => {
+  return <Preferences />
+}
+
 function App() {
   return (
     <GlobalProvider>
@@ -41,6 +46,7 @@ function App() {
           <Route path="/recipe-detail" element={<RecipeDetailPage />} />
           <Route path="/user-recipes" element={<UserRecipesPage />} />
           <Route path="/ingredients" element={<IngredientsPage />} />
+          <Route path="/preferences" element={<PreferencesPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Routes>

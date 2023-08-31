@@ -58,3 +58,9 @@
   border-bottom: solid;
   border-color: var(--color-detail-2);
 }
+
+@media only screen and (max-width: 768px) {
+  .logo h1 {
+    display: none;
+  }
+}

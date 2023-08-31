@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../navbar/Navbar";
 import backend from "../../services/backend";
 import { useGlobalContext } from "../../providers";
 
 import classes from "./Login.module.css";
+import logo from "../../assets/ChefHubIcon.png";
 import background from "../../assets/backgroundlogin.png";
 import background2 from "../../assets/backgroundlogin2.png";
 
@@ -13,8 +13,8 @@ const Login = () => {
   const { updateUser } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(email)
-  console.log(password)
+  // console.log(email);
+  // console.log(password);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -44,7 +44,14 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
+      <div className={classes.navbar}>
+        <Link to={"/"}>
+          <span className={classes.logo}>
+            <img src={logo} />
+            <h1 className={classes.titleLogo}>ChefHub</h1>
+          </span>
+        </Link>
+      </div>
       <h1 className={classes.title}>Login</h1>
       <div className={classes.loginBody}>
         <form className={classes.formContainer}>
