@@ -7,35 +7,66 @@ export function stripAccents(words: string): string {
     'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i',
     'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o', 'ö': 'o',
     'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u',
-    'ç': 'c',
+    'ç': 'c', 'ñ': 'n',
     'Á': 'A', 'À': 'A', 'Ã': 'A', 'Â': 'A', 'Ä': 'A',
     'É': 'E', 'È': 'E', 'Ê': 'E', 'Ë': 'E',
     'Í': 'I', 'Ì': 'I', 'Î': 'I', 'Ï': 'I',
     'Ó': 'O', 'Ò': 'O', 'Õ': 'O', 'Ô': 'O', 'Ö': 'O',
     'Ú': 'U', 'Ù': 'U', 'Û': 'U', 'Ü': 'U',
-    'Ç': 'C'
+    'Ç': 'C', 'Ñ': 'n',
   };
 
-  return words.replace(
-    /[áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇ]/g,
-    (matchedSubstring) => {
-      return mapAccents[matchedSubstring as keyof typeof mapAccents];
-    }
-  );
+  return words.split(' ').map((word) => {
+    return word.replace(
+      /[áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ]/g,
+      (matchedSubstring) => {
+        return mapAccents[matchedSubstring as keyof typeof mapAccents];
+      }
+    );
+  }).join(' ');
 }
 
 export function abbreviate(words: string): string {
-  const mapAbbreviations = {
-    'miligrama': 'mg', 'grama': 'g', 'quilograma': 'kg', 'kilograma': 'kg',
-    'mililitro': 'ml', 'litro': 'l'
-  };
 
-  // TODO: aumentar o número de abreviações até ter um mapa grande suficiente
+  // Function to escape special characters in regex
+  function escapeRegExp(str: string) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
 
-  const pattern = /\b(miligrama|grama|quilograma|kilograma|mililitro|litro)\b/g;
-  return words.replace(pattern, (matchedSubstring) => {
-    return mapAbbreviations[matchedSubstring as keyof typeof mapAbbreviations];
+  const supportedUnitMeasures = [
+    'miligrama', 'grama',
+    'quilograma', 'kilograma',
+    'mililitro', 'litro',
+    'pitada',
+    'colher', 'de',
+    'xícara', 'xicara', 'taça',
+    'fatia', 'unidade',
+    'dente', 'ramo', 'folha',
+  ];
+
+  const abbreviatedSupportedUnitMeasures = [
+    'mg', 'g',
+    'kg', 'kg',
+    'ml', 'l',
+    'pit.',
+    'c', '',
+    'xíc.', 'xic.', 'taça',
+    'fatia', 'unid.',
+    'dente', 'ramo', 'folha',
+  ];
+
+  const mapAbbreviations: { [key: string]: string } = {};
+  supportedUnitMeasures.forEach((unitMeasure, index) => {
+    mapAbbreviations[unitMeasure] = abbreviatedSupportedUnitMeasures[index];
   });
+
+  const pattern = new RegExp(`\\b(${supportedUnitMeasures.join('|')})\\b`, 'g');
+
+  return words.split(' ').map((word) => {
+    return word.toLowerCase().replace(pattern, (matchedSubstring) => {
+      return mapAbbreviations[matchedSubstring];
+    })
+  }).join('');
 }
 
 
@@ -43,7 +74,10 @@ export function removePlural(words: string): string {
 
   const singularWords = words
     .split(' ')
+    .map(word => word === "colheres" ? word.slice(0, -2) : word)
+    // .map(word => word === "xicaras" ? word.slice(0, -2) : word)
     .map(word => pluralize.singular(word))
+    .map(word => word.slice(-1).toLowerCase() === "s" ? word.slice(0, -1) : word)
     .join(' ');
 
   return singularWords;

@@ -54,7 +54,7 @@ export default class UserController {
     const isRepeated = users_with_equal_email.length > 0;
     if (isRepeated) {
       const msg = "[UserController.register] Email already in use";
-      return res.status(400)
+      return res.status(500)
         .json({ msg, id: NIL_UUID });
     }
 
@@ -86,17 +86,16 @@ export default class UserController {
     // Select existing user
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const { data: existing_user, error: selectError } = await supabase
+    const { data: existingUser, error: selectError } = await supabase
       .from('User')
       .select(`*`)
       .eq('email', email);
-    // .eq('password', password);
     if (selectError) {
       return res.status(500)
         .json({ msg: 'Error selecting existing user', id: NIL_UUID });
     }
-    console.log(`existing_user->${existing_user}`);
-    if (!existing_user || !existing_user[0]) {
+    console.log(`existing_user->${existingUser}`);
+    if (!existingUser || !existingUser[0]) {
       const msg = "Invalid Email";
       return res.status(500)
         .json({ msg, id: NIL_UUID });
@@ -107,8 +106,8 @@ export default class UserController {
 
     // Check for valid credentials
     const passwordsMatch = (
-      await bcrypt.compare(password, existing_user[0].password)
-      || password === existing_user[0].password
+      await bcrypt.compare(password, existingUser[0].password)
+      || password === existingUser[0].password
     );
     if (!passwordsMatch) {
       return res.status(401)
@@ -119,6 +118,6 @@ export default class UserController {
 
     // Se chegou até aqui, significa que o login foi bem-sucedido
     return res.status(200)
-      .json({ msg: 'Login bem-sucedido', id: existing_user[0].id });
+      .json({ msg: 'Login bem-sucedido', id: existingUser[0].id });
   }
 }

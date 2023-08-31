@@ -80,21 +80,26 @@ Será necessário criar 3 contas novas :point_down:
 Figma: https://www.figma.com/file/O98HiGqkhaBn6RxM3F0ukH/Prot%C3%B3tipo?type=design&mode=design
 Trello: https://trello.com/b/wx34aFsO/chefhub
 Repositório do backend: https://github.com/VictorG-028/ChefHub-Backend
-Repositório do frontend web: https://github.com/carlosgabriel311/ChefHub_WEB/tree/master/src
+Repositório do frontend web: https://github.com/carlosgabriel311/ChefHub_WEB/tree/master
 Repositório do frontend mobile: https://github.com/carlosgabriel311/ChefHub_MOBILE
 
 Links de aprendizado usados nesse projeto
 1- https://youtu.be/Jv2uxzhPFl4?t=249
 2- https://www.youtube.com/watch?v=FgnxcUQ5vho
-3- https://blog.logrocket.com/how-to-set-up-node-typescript-express/
-4- https://www.stackhawk.com/blog/typescript-cors-guide-what-it-is-and-how-to-enable-it/
-5- https://www.typescriptlang.org/docs/handbook/2/classes.html
-6- https://github.com/nociza/Bimg/tree/main
-7- https://www.youtube.com/watch?v=LjJFu6Y6MrU
-8- https://www.youtube.com/watch?v=pvrKHpXGO8E
-9- https://supabase.com/docs/guides/auth 
-10- https://stackoverflow.com/questions/72300047/uploading-base64-images-to-supabase
-11- https://supabase.com/docs/reference/javascript/installing
-12- Como instalar supabase CLI: https://github.com/supabase/cli
-13- https://microsoft.github.io/TypeChat/blog/introducing-typechat/
+3- https://huafu.github.io/ts-jest/user/install
+    https://jestjs.io/docs/expect
+    https://plainenglish.io/blog/beginners-guide-to-testing-jest-with-node-typescript#supertest
+    https://stackoverflow.com/questions/9517880/how-does-one-unit-test-routes-with-express
+    https://www.npmjs.com/package/supertest
+4- https://blog.logrocket.com/how-to-set-up-node-typescript-express/
+5- https://www.stackhawk.com/blog/typescript-cors-guide-what-it-is-and-how-to-enable-it/
+6- https://www.typescriptlang.org/docs/handbook/2/classes.html
+7- https://github.com/nociza/Bimg/tree/main
+8- https://www.youtube.com/watch?v=LjJFu6Y6MrU
+9- https://www.youtube.com/watch?v=pvrKHpXGO8E
+10- https://supabase.com/docs/guides/auth 
+11- https://stackoverflow.com/questions/72300047/uploading-base64-images-to-supabase
+12- https://supabase.com/docs/reference/javascript/installing
+13- Como instalar supabase CLI: https://github.com/supabase/cli
+14- https://microsoft.github.io/TypeChat/blog/introducing-typechat/
 -->

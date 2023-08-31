@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import querystring from "querystring";
 import { performance } from "perf_hooks";
-import Config from "./imagenConfig.js";
+import config from "./imagenConfig";
 
 const BING_URL = "https://www.bing.com";
 
@@ -162,8 +162,8 @@ const saveImages = async (
 };
 
 export const generateImagesLinks = async (prompt: string) => {
-  const authCookie = Config.bingImageCookie;
-  const outputDir = `${Config.tempDir}/${prompt}`;
+  const authCookie = config.bingImageCookie;
+  const outputDir = `${config.tempDir}/${prompt}`;
 
   if (!authCookie || !prompt) {
     throw new Error("Missing parameters");
@@ -176,8 +176,8 @@ export const generateImagesLinks = async (prompt: string) => {
 };
 
 export const generateImageFiles = async (prompt: string) => {
-  const authCookie = Config.bingImageCookie;
-  const outputDir = `${Config.tempDir}/${prompt}`;
+  const authCookie = config.bingImageCookie;
+  const outputDir = `${config.tempDir}/${prompt}`;
 
   if (!authCookie || !prompt) {
     throw new Error("Missing parameters");

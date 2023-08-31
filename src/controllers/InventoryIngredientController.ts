@@ -111,7 +111,7 @@ export default class IngredientController {
     // }
 
     // Remover o ingrediente da tabela
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('InventoryIngredient')
       .delete()
       .eq("user_id", user_id)
@@ -122,7 +122,7 @@ export default class IngredientController {
     // .eq("quantity", quantity)
     // .eq("unit_measure", unit_measure);
     if (error) {
-      const msg = "[IngredientController] Error deleting ingredient";
+      const msg = "[IngredientController.delete] Error deleting ingredient";
       res.status(500).json(msg);
     }
 
@@ -136,7 +136,7 @@ export default class IngredientController {
 
     const response = await Consume_GPT_API.get_GPT_response(prompt, 0);
     if (response.includes("error")) {
-      const msg = "[IngredientController.get_calorie] Error in chatGPT completion";
+      const msg = "[IngredientController.consultCalorie] Error in chatGPT completion";
       return res.status(500).json({ msg, calories: [] });
     }
     const lines = response.split('\n').map((linha) => linha.trim());
