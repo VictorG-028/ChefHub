@@ -11,8 +11,8 @@
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "remove_dist_insides": "rm -rf dist/*",
-    "test": "SET USE_TEST_ENV='true' && jest --verbose --detectOpenHandles",
-    "test-cover": "jest --watchAll --verbose --coverage"
+    "test": "jest --verbose --detectOpenHandles",
+    "JSON comment(dont run this)": "SET USE_TEST_ENV='true' && jest --watchAll --verbose --coverage"
   },
   "keywords": [],
   "author": "VictorG-028",

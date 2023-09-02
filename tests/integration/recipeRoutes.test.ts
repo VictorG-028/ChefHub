@@ -36,7 +36,7 @@ describe('Integration Tests of User Routes', () => {
       .expect(StatusCodes.OK);
   });
 
-  it('Successfully GET /get_user_recipes/:user_id', async () => {
+  it('Successfully GET /get_user_recipes/:user_id passing valid id', async () => {
     const id = Helper.validTestUser.id;
     await request(app)
       .get(`/get_user_recipes/${id}`)
@@ -86,7 +86,7 @@ describe('Integration Tests of User Routes', () => {
     createRecipeRes = res.body;
   }, 120000);
 
-  it('/get_recipe/:id', async () => {
+  it('Successfully GET /get_recipe/:id passing valid id', async () => {
     const id = createRecipeRes ? createRecipeRes.recipe_id : "a";
     expect(id).not.toBe("a");
 

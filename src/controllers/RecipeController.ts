@@ -109,7 +109,7 @@ export default class RecipeController {
     // Selecting users data
     const { data: usersData, error: selectUError } = await supabase
       .from('User')
-      .select(`email`)
+      .select(`email, id`)
       .in('id', allUserIds);
     if (!usersData || selectUError) {
       const msg = "[RecipeController.getAllSharedRecipes] Error selecting user data";
@@ -119,9 +119,9 @@ export default class RecipeController {
     // zip as informações em um único array
     const sharedRecipesData: SharedRecipesResBody[] = allSharedRecipes.map((sr, i) => {
       return {
-        id: recipesData[i].id,
-        title: recipesData[i].title,
-        created_by: usersData[i].email,
+        id: sr.recipe_id,
+        title: recipesData.filter((r) => r.id == sr.recipe_id)[0].title,
+        created_by: usersData.filter((u) => u.id === sr.user_id)[0].email,
         description: sr.description,
         image: sr.img_link
       };
@@ -268,7 +268,7 @@ export default class RecipeController {
     console.log("[1] criou prompt");
     const raw_response = await Consume_GPT_API.get_GPT_response(messages, temperature);
     console.log("[2] criou receita");
-    // console.log(raw_response)
+    console.log(raw_response)
     // console.log("<-----------------------------");
     // console.log(JSON5.stringify(raw_response))
     // console.log("<-----------------------------");
