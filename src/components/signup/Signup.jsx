@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../providers";
 import classes from "./Signup.module.css";
 import background from "../../assets/backgroundlogin.png";
 import background2 from "../../assets/backgroundlogin2.png";
+import logo from "../../assets/ChefHubIcon.png";
 
 const Signup = () => {
   const navigate = useNavigate();

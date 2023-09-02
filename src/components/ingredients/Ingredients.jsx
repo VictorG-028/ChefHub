@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import backend from "../../services/backend";
 import Navbar from "../navbar/Navbar";
 import classes from "./Ingredients.module.css";
 import { useGlobalContext } from "../../providers";
 
 const Ingredients = () => {
-  const navigate = useNavigate();
   const { userId } = useGlobalContext();
   const [ingredients, setIngredients] = useState([]);
   const { selectedIngredients, updateIngredients } = useGlobalContext();
@@ -139,7 +138,6 @@ const Ingredients = () => {
         </div>
       </section>
 
-      {/* Modal */}
       {showModal && (
         <div className={classes.modalOverlay}>
           <div className={classes.modalContent}>

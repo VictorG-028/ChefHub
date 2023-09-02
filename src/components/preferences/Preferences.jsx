@@ -6,24 +6,12 @@ import trash from "../../assets/trash.svg";
 import { useGlobalContext } from "../../providers";
 
 const Preferences = () => {
-  // const [preferences, setPreferences] = useState([]);
   const [showAddPreferenceModal, setShowAddPreferenceModal] = useState(false);
-  const { selectedPreferences, updateIngredients } = useGlobalContext();
+  const { selectedPreferences, updatePreferences } = useGlobalContext();
 
   const addPreference = (newPreference) => {
-    // setPreferences([...preferences, newPreference]);
-    updateIngredients([...selectedPreferences, newPreference]);
+    updatePreferences([...selectedPreferences, newPreference]);
   };
-
-  // TODO remover isso
-  // let array = []; // Isso reseta o array toda vez que o componente é renderizado
-  // const selectedPreferencesInput = document.querySelectorAll(
-  //   "input[type=checkbox]:checked"
-  // );
-  // for (let i = 0; i < selectedPreferencesInput.length; i++) {
-  //   array.push(selectedPreferencesInput[i].value);
-  // }
-  // console.log("selecionados:", array);
 
   const clearIngredients = () => {
     const selectedPreferencesInput = document.querySelectorAll(
@@ -46,7 +34,9 @@ const Preferences = () => {
             value="Gosta de comida Salgada"
             id="Salgado"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -59,7 +49,9 @@ const Preferences = () => {
             value="Gosta de comida Doce"
             id="Doce"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -72,7 +64,9 @@ const Preferences = () => {
             value="O que o cliente pode fazer somente com os seus componente ? Não pode utilizar componente fora da lista do cliente. Os componente da receita devem ser exclusivamente os componente do usuário"
             id="Regra: Não ingredientes extras"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -85,7 +79,9 @@ const Preferences = () => {
             value="Não escreva uma receita de bolo. Escreva uma receita incomum."
             id="Regra: receita criativa"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -98,7 +94,9 @@ const Preferences = () => {
             value="O cliente precisa de uma receita fácil de fazer."
             id="Regra: receita simples"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -111,7 +109,9 @@ const Preferences = () => {
             value="O cliente quer um passo a passo mais detalhado."
             id="Regra: passo a passo mais detalhado"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -124,7 +124,9 @@ const Preferences = () => {
             value="Gosta de comida Japonesa"
             id="Japonesa"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -137,7 +139,9 @@ const Preferences = () => {
             value="Gosta de comida Chinesa"
             id="Chinesa"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -150,7 +154,9 @@ const Preferences = () => {
             value="Gosta de comida Italiana"
             id="Italiana"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -164,7 +170,9 @@ const Preferences = () => {
             value="Gosta de comida Brasileira"
             id="Brasileira"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -177,7 +185,9 @@ const Preferences = () => {
             value="Gosta de comida Tailandesa"
             id="Tailandesa"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -190,7 +200,9 @@ const Preferences = () => {
             value="Gosta de comida Indiana"
             id="Indiana"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -203,7 +215,9 @@ const Preferences = () => {
             value="Gosta de comida Mexicana"
             id="Mexicana"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -216,7 +230,9 @@ const Preferences = () => {
             value="Gosta de comida Grega"
             id="Grega"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -229,7 +245,9 @@ const Preferences = () => {
             value="Gosta de comida Francesa"
             id="Francesa"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -243,7 +261,9 @@ const Preferences = () => {
             value="Gosta de comida Argentina"
             id="Argentina"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -256,7 +276,9 @@ const Preferences = () => {
             value="Gosta de comida Portuguesa"
             id="Portuguesa"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -269,7 +291,9 @@ const Preferences = () => {
             value="Gosta de comida Espanhola"
             id="Espanhola"
             name="preference"
-            onChange={(e) => addPreference(e.target.value)}
+            onChange={(e) => {
+              e.target.checked && addPreference(e.target.value);
+            }}
           />
           {/* <button className={classes.trashIconBtn} onClick={() => {}}>
             <img src={trash} className={classes.trashIcon} />
@@ -314,7 +338,7 @@ const Preferences = () => {
             to={"/loading"}
             className={classes.nextButton}
           >
-            Próxima etapa
+            Criar Receita
           </Link>
         </div>
       </section>

@@ -4,10 +4,17 @@ import Navbar from "../navbar/Navbar";
 import backend from "../../services/backend";
 import classes from "./UserRecipes.module.css";
 import { useGlobalContext } from "../../providers";
+import sharePNG from "../../assets/share.png";
 
 const UserRecipes = () => {
   const { userId, updateRecipe } = useGlobalContext();
   const [recipes, setRecipes] = useState([]);
+  const [shareModalState, setShareModalState] = useState({
+    isOpen: false,
+    selectedRecipeId: null,
+    description: ""
+  });
+
 
   useEffect(() => {
     // console.log("userId-> " + userId);
@@ -21,6 +28,15 @@ const UserRecipes = () => {
         console.error("Error fetching shared recipes:", error);
       });
   }, []);
+
+  const handleRequest = async () => {
+    await backend.post('/share_recipe', {
+      user_id: userId,
+      recipe_id: shareModalState.selectedRecipeId,
+      description: description,
+    });
+    setShareModalState({ ...shareModalState, isOpen: false });
+  };
 
   return (
     <>
@@ -47,16 +63,62 @@ const UserRecipes = () => {
                   <span key={index}>{step}<br /></span>
                 ))
             }</p>
-            {/* You can replace the following link with the appropriate route */}
-            <Link
-              to={`/recipe-detail`}
-              onClick={() => updateRecipe(recipe.id)}
-            >
-              Ler mais...
-            </Link>
+            <div className={classes.bottomClickables}>
+              <Link
+                to={`/recipe-detail`}
+                onClick={() => updateRecipe(recipe.id)}
+              >
+                Ler mais...
+              </Link>
+              <button
+                type="button"
+                className={classes.shareButton}
+                onClick={() => {
+                  if (shareModalState.selectedRecipeId == recipe.id) {
+                    setShareModalState({
+                      ...shareModalState,
+                      isOpen: true,
+                      selectedRecipeId: recipe.id
+                    });
+                  } else {
+                    setShareModalState({
+                      ...shareModalState,
+                      isOpen: true,
+                      selectedRecipeId: recipe.id,
+                      description: ""
+                    });
+                  }
+                }}
+              >
+                <img src={sharePNG} alt="Compartilhar" />
+              </button>
+            </div>
           </div>
         ))}
-      </section>
+      </section >
+
+      {shareModalState.isOpen && (
+        <div className={classes.shareModalOverlay}>
+          <div className={classes.shareModalContent}>
+            <h2>Compartilhar Receita</h2>
+            <input
+              type="text"
+              placeholder="Descrição"
+              value={description}
+              onChange={(e) => {
+                setShareModalState({
+                  ...shareModalState,
+                  description: e.target.value
+                });
+              }}
+            />
+            <button onClick={handleRequest}>Compartilhar</button>
+            <button onClick={() => {
+              setShareModalState({ ...shareModalState, isOpen: false });
+            }}>Cancelar</button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
