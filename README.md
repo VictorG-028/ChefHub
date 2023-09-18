@@ -74,6 +74,22 @@ Será necessário criar 3 contas novas :point_down:
     4.3. Dentro do arquivo `.env`, preencha os valores das variáveis de ambiente. O token de acesso guardado no .txt é o valor correto para a variável SUPABASE_LOGIN_TOKEN.
 5. Finalmente, execute `npm run dev`
 
+<!-- Lista de unidades de medida de ingredientes
+"xícara"
+"xícara medidora"
+"xícara de chá (240 ml)"
+"colher"
+"colher medidora"
+"colher de café (1 ml)"
+"colher de chá (5 ml)"
+"colher de sopa (15 ml)"
+"copo americano (200 ml)"
+"copo de requeijão (250 ml)"
+"ml (mililitro)"
+"l (litro)"
+"g (grama)"
+"kg (kilograma)"
+-->
 
 <!-- 
 
