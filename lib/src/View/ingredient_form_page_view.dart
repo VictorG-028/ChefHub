@@ -29,6 +29,18 @@ class _IngredientFormPageState extends State<IngredientFormPage> {
               textController: nameInputController,
             ),
             const SizedBox(height: 30),
+            CustomTextFormField(
+              fieldTitle: 'Quantidade',
+              label: '(opcional)',
+              textController: quantityInputController,
+            ),
+            const SizedBox(height: 30),
+            CustomTextFormField(
+              fieldTitle: 'Unidade de medida',
+              label: '(opcional)',
+              textController: unitMeasureInputController,
+            ),
+            const SizedBox(height: 30),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFEC0B43),

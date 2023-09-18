@@ -113,9 +113,9 @@ class _IngredientsPageState extends State<IngredientsPage> {
                       alignment: Alignment.centerLeft,
                       height: 100,
                       color: ingredient.isSelected
-                          ? Color.fromARGB(
+                          ? const Color.fromARGB(
                               255, 190, 244, 114) // Highlight if selected
-                          : Color.fromARGB(255, 213, 198, 181),
+                          : const Color.fromARGB(255, 213, 198, 181),
                       child: ListTile(
                         onTap: () {
                           setState(() {

@@ -47,7 +47,7 @@ O ChefHub é uma aplicação mobile desenvolvida em Flutter que tem como objetiv
 - Fabio Hatem
 - João Victor
 ## Testes
-- Teste de inserção de email inválido no Login: na linha de comando se certifique de estar no diretorio raiz e rode o comando "flutter test test_email_invalido.dart"
+- Teste de inserção de email inválido no Login: na linha de comando se certifique de estar no diretorio raiz e rode o comando "flutter test test/test_email_invalido.dart"
 ## Licença
 
 Este projeto está sob a Licença [MIT](https://github.com/carlosgabriel311/ChefHub_MOBILE/blob/main/LICENSE).

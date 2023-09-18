@@ -6,12 +6,7 @@ import 'package:provider/provider.dart';
 import '../components/custom_app_bar.dart';
 import '../model/shared_recipe_model.dart';
 import '../model/user_model.dart';
-
-class ScreenArguments {
-  final int recipeId;
-
-  ScreenArguments(this.recipeId);
-}
+import '../model/recipe_detail_args.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,8 +41,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final String userId = userProvider.id;
+    // final userProvider = Provider.of<UserProvider>(context);
+    // final String userId = userProvider.id;
 
     return Scaffold(
       drawer: CustomDrawer(),
@@ -57,8 +52,11 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             final recipe = sharedRecipes[index];
             return GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/recipeDetails',
-                  arguments: {sharedRecipes[index].id}),
+              onTap: () => Navigator.pushNamed(
+                context,
+                '/recipeDetails',
+                arguments: ScreenArguments(sharedRecipes[index].id),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
