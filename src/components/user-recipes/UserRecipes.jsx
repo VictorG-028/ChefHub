@@ -33,7 +33,7 @@ const UserRecipes = () => {
     await backend.post('/share_recipe', {
       user_id: userId,
       recipe_id: shareModalState.selectedRecipeId,
-      description: description,
+      description: shareModalState.description,
     });
     setShareModalState({ ...shareModalState, isOpen: false });
   };
@@ -104,7 +104,7 @@ const UserRecipes = () => {
             <input
               type="text"
               placeholder="Descrição"
-              value={description}
+              value={shareModalState.description}
               onChange={(e) => {
                 setShareModalState({
                   ...shareModalState,
