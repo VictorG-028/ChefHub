@@ -1,0 +1,107 @@
+.homeBody {
+  margin-top: 10rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipeCard {
+  color: var(--color-default);
+  /* Add this to make the whole card flex container */
+  display: flex;
+  /* Make both sides of the card equal in height */
+  align-items: stretch;
+  /* Remove underline from links */
+  text-decoration: none;
+}
+
+.recipeContainer {
+  display: flex;
+  padding: 0 4rem 2rem 4rem;
+  /* Alinhar no topo para evitar altura excessiva */
+  align-items: flex-start;
+}
+
+.recipeContainer img {
+  width: 20rem;
+  height: 12rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.recipeText {
+  display: flex;
+  padding-left: 1rem;
+  flex-direction: column;
+  flex: 1;
+
+  /* Definir altura máxima para evitar overflow vertical */
+  /* Ajuste conforme necessário */
+  max-height: 12rem;
+
+  /* Habilitar overflow apenas na vertical */
+  overflow-y: auto;
+}
+
+.recipeDescription {
+  font-weight: 400;
+}
+
+.recipeText h2 {
+  margin: 0;
+  color: var(--color-principal-2-shade-2);
+}
+
+.recipeText h2:hover {
+  color: var(--color-principal-2);
+  transition: 400ms;
+}
+
+.recipeText p {
+  /* Esconde o conteúdo excedente */
+  overflow: hidden;
+  /* Adiciona os três pontos de elipse */
+  text-overflow: ellipsis;
+
+  position: relative;
+
+  /* Adicionar espaço superior. Ajuste conforme necessário */
+  max-height: 6rem;
+
+  /* Adicionar espaço inferior. Ajuste conforme necessário */
+  margin-bottom: 1rem;
+}
+
+/* 
+.recipeText p::after {
+  content: "...";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%);
+} 
+*/
+
+@media only screen and (max-width: 425px) {
+  .recipeContainer {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .recipeText {
+    align-items: center;
+    text-align: center;
+  }
+
+  .recipeText h2,
+  p {
+    margin: 0.5rem;
+  }
+
+  .recipeText p {
+    font-size: 14px;
+
+    /* Ajuste conforme necessário */
+    max-height: 5rem;
+    margin-bottom: 1rem;
+  }
+}
