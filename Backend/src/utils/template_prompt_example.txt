@@ -1,0 +1,48 @@
+User: escreva exemplos ingredientes na formatação JSON
+Response: {
+[ 
+{"nome": "Abacate", "quantidade": "1", "unidade_de_medida": "unidade"},
+{"nome": "Suco de Uva", "quantidade": "", "unidade_de_medida": ""},
+{"nome": "Chocolate em barra", "quantidade": "75", "unidade_de_medida": "gramas"},
+{"nome": "Sal", "quantidade": "A gosto", "unidade_de_medida": ""},
+{"nome": "Açucar", "quantidade": "", "unidade_de_medida": ""},
+{"nome": "Cenoura Ralada", "quantidade": "5", "unidade_de_medida": "gramas"},
+{"nome": "Água", "quantidade": "150", "unidade_de_medida": "ml"},
+{"nome": "Corante Azul", "quantidade": "", "unidade_de_medida": ""},
+]
+}
+User: Agora que você sabe a formatação dos ingredientes, escrever uma receita em formato JSON (com Título, ingredientes e instruções) que utilize qualquer ingrediente.
+Response: {
+"titulo": "Bolo de Chocolate",
+"Ingredientes": [ 
+{"nome": "Ovos", "quantidade": "4", "unidade_de_medida": "unidade"},
+{"nome": "Manteiga", "quantidade": "4", "unidade_de_medida": "Colheres de sopa"},
+{"nome": "Açúcar", "quantidade": "5", "unidade_de_medida": "Xícaras de chá"},
+{"nome": "Leite", "quantidade": "1", "unidade_de_medida": "Xícara de chá"},
+{"nome": "Chocolate em Pó", "quantidade": "11", "unidade_de_medida": "Colheres de sopa"},
+{"nome": "Farinha de trigo", "quantidade": "3", "unidade_de_medida": "Xícaras de chá"},
+{"nome": "Fermento", "quantidade": "2", "unidade_de_medida": "Colheres de sopa"},
+{"nome": "Creme de leite com soro", "quantidade": "2", "unidade_de_medida": "Latas"},
+],
+"Instruçoes": [
+"Começando com a massa. Em um liquidificador adicione 4 ovos,  4 colheres de chocolate em pó, 2 colheres de manteiga, 3 xícaras de farinha de trigo, 2 xícaras de açucar e o leite, depois bata por 5 minutos.",
+"Adicione o fermento e misture com uma espátula delicadamente.",
+"Em uma forma untada, despeje a massa e asse em forno médio (180 ºC) preaquecido por cerca de 40 minutos. Não se esqueça de usar uma forma alta para essa receita: como leva duas colheres de fermento, ela cresce bastante! Outra solução pode ser colocar apenas uma colher de fermento e manter a sua receita em uma forma pequena.",
+"Acrescente o creme de leite e misture bem até obter uma consistência cremosa.",
+"Seguindo com a calda. Em uma panela, aqueça a manteiga e misture o chocolate em pó até que esteja homogêneo.",
+"Desligue o fogo e acrescente o açúcar."
+]
+}
+User: Agora que você sabe a formatação da receita, tente responder ao pedido abaixo em formatação JSON. Você é um chef de cozinha renomado que fornece receitas em JSON que qualquer pessoa conseguiria fazer. Seu trabalho é levar em consideração os ingredientes e preferências do cliente e gerar uma receita composta de titulo, ingredientes e instruçoes. Você pode acrescentar ou não utilizar ingredientes do cliente. Não acrescente comentários antes da receita e nem depois das instruções.
+
+{
+"ingredientes_do_cliente":  [
+{"nome": "abacate", "quantidade": "", "unidade_de_medida": ""},
+{"nome": "tomate", "quantidade": "", "unidade_de_medida": ""},
+{"nome": "queijo ralado", "quantidade": "", "unidade_de_medida": ""},
+]
+"preferências_do_cliente": [ 
+"não gosta de guaca mole", 
+"gosta de comida japonesa"
+]
+}
