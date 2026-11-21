@@ -30,3 +30,7 @@ This mono repo includes the below repositories:
 - Backend: server made with NodeJS + Typescript + Express + Supabase
 - Frontend Web: client made with React
 - Frontend Mobile: client made with Flluter
+
+## Maintainer notes
+
+Two leftovers from the old working copies. (1) Branch `wip/openai-v4-bump` holds an unfinished dependency update: `openai` from `^3.3.0` to `^4.52.0`, plus regenerated `package-lock.json` and `pubspec.lock`. It is not merged because the backend still calls the v3 API (`Configuration`, `OpenAIApi` and `createChatCompletion` in `Backend/src/utils/consume_GPT_API.ts`, and the `ChatCompletionRequestMessage` type in `Backend/src/utils/promptCreator.ts`), which v4 removed. To finish it: merge the branch, replace those calls with `new OpenAI({ apiKey })` and `openai.chat.completions.create(...)`, then run the backend tests. To drop it: delete the branch. (2) An old local stash (`WIP on main`, 2023-10-27) existed in a second copy of this repo. It only renamed `ChefHub Showcase Gif 1.gif` to `ChefHub-Showcase-Gif-1.gif`, which `main` already contains, so there is nothing to apply.
